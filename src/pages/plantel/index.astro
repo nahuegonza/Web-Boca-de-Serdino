@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+import EstadoVacio from '../../components/EstadoVacio.astro';
+import { obtenerPlantel } from '../../lib/cms';
+
+const categorias = (await obtenerPlantel()).filter((c) => c.slug);
+---
+<Base titulo="Plantel y cuerpo técnico" descripcion="Jugadores y cuerpo técnico de todas las categorías de Boca de Serodino.">
+  <div class="contenedor">
+    <h1 class="pagina-titulo">Plantel</h1>
+    <p style="margin:0 0 var(--space-6);max-width:68ch">Elegí la categoría para ver jugadores y cuerpo técnico.</p>
+    {categorias.length ? (
+      <ul class="cats">
+        {categorias.map((c) => {
+          const jugadores = (c.personas ?? []).filter((p) => p.tipo !== 'tecnico').length;
+          const tecnicos = (c.personas ?? []).filter((p) => p.tipo === 'tecnico').length;
+          return (
+            <li>
+              <div class="cat-card">
+                <h2><a href={`/plantel/${c.slug}`}>{c.nombre}</a></h2>
+                <p class="cat-card__suave">
+                  {jugadores || tecnicos
+                    ? `${jugadores} ${jugadores === 1 ? 'jugador' : 'jugadores'}${tecnicos ? `, ${tecnicos} en el cuerpo técnico` : ''}`
+                    : 'Plantel sin cargar'}
+                </p>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    ) : (
+      <EstadoVacio titulo="Todavía no hay categorías cargadas.">Cuando el club cargue el plantel en el panel, aparece acá.</EstadoVacio>
+    )}
+  </div>
+</Base>

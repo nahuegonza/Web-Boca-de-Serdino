@@ -1,0 +1,194 @@
+[
+ {
+  "_id": "cat-primera",
+  "nombre": "Primera",
+  "slug": "primera",
+  "esMenores": false,
+  "personas": [
+   {
+    "_id": "j1",
+    "tipo": "jugador",
+    "nombre": "Martín",
+    "apellido": "Gómez",
+    "numero": 9,
+    "posicion": "delantero",
+    "rol": null,
+    "autorizacionImagen": true,
+    "foto": {
+     "url": "http://localhost:4400/jugador1.jpg",
+     "ancho": 800,
+     "alto": 1000,
+     "alt": null
+    }
+   },
+   {
+    "_id": "j2",
+    "tipo": "jugador",
+    "nombre": "Lucas",
+    "apellido": "Fernández",
+    "numero": 10,
+    "posicion": "mediocampista",
+    "rol": null,
+    "autorizacionImagen": false,
+    "foto": {
+     "url": "http://localhost:4400/jugador2.jpg",
+     "ancho": 800,
+     "alto": 1000,
+     "alt": null
+    }
+   },
+   {
+    "_id": "j3",
+    "tipo": "jugador",
+    "nombre": "Pablo",
+    "apellido": "Acosta",
+    "numero": 1,
+    "posicion": "arquero",
+    "rol": null,
+    "autorizacionImagen": null,
+    "foto": null
+   },
+   {
+    "_id": "j4",
+    "tipo": "jugador",
+    "nombre": "Diego",
+    "apellido": "Sosa",
+    "numero": 2,
+    "posicion": "defensor",
+    "rol": null,
+    "autorizacionImagen": null,
+    "foto": null
+   },
+   {
+    "_id": "j5",
+    "tipo": "jugador",
+    "nombre": "Nicolás",
+    "apellido": "Benítez",
+    "numero": 6,
+    "posicion": "defensor",
+    "rol": null,
+    "autorizacionImagen": null,
+    "foto": {
+     "url": "http://localhost:4400/jugador3.jpg",
+     "ancho": 800,
+     "alto": 1000,
+     "alt": null
+    }
+   },
+   {
+    "_id": "j6",
+    "tipo": "jugador",
+    "nombre": "Franco",
+    "apellido": "Molina",
+    "numero": 7,
+    "posicion": "delantero",
+    "rol": null,
+    "autorizacionImagen": null,
+    "foto": null
+   },
+   {
+    "_id": "t1",
+    "tipo": "tecnico",
+    "nombre": "Carlos",
+    "apellido": "Ibáñez",
+    "numero": null,
+    "posicion": null,
+    "rol": "Director técnico",
+    "autorizacionImagen": null,
+    "foto": {
+     "url": "http://localhost:4400/tecnico1.jpg",
+     "ancho": 800,
+     "alto": 1000,
+     "alt": null
+    }
+   },
+   {
+    "_id": "t2",
+    "tipo": "tecnico",
+    "nombre": "Raúl",
+    "apellido": "Medina",
+    "numero": null,
+    "posicion": null,
+    "rol": "Preparador físico",
+    "autorizacionImagen": null,
+    "foto": null
+   }
+  ]
+ },
+ {
+  "_id": "cat-reserva",
+  "nombre": "Reserva",
+  "slug": "reserva",
+  "esMenores": false,
+  "personas": []
+ },
+ {
+  "_id": "cat-sub15",
+  "nombre": "Sub-15",
+  "slug": "sub-15",
+  "esMenores": true,
+  "personas": [
+   {
+    "_id": "m1",
+    "tipo": "jugador",
+    "nombre": "Juan Martín",
+    "apellido": "Pérez",
+    "numero": 5,
+    "posicion": "mediocampista",
+    "rol": null,
+    "autorizacionImagen": true,
+    "foto": {
+     "url": "http://localhost:4400/menor1.jpg",
+     "ancho": 800,
+     "alto": 1000,
+     "alt": null
+    }
+   },
+   {
+    "_id": "m2",
+    "tipo": "jugador",
+    "nombre": "Tomás",
+    "apellido": "Ríos",
+    "numero": 9,
+    "posicion": "delantero",
+    "rol": null,
+    "autorizacionImagen": false,
+    "foto": {
+     "url": "http://localhost:4400/menor2-SIN-AUTORIZACION.jpg",
+     "ancho": 800,
+     "alto": 1000,
+     "alt": null
+    }
+   },
+   {
+    "_id": "m3",
+    "tipo": "jugador",
+    "nombre": "Sofía",
+    "apellido": "de la Torre",
+    "numero": 1,
+    "posicion": "arquero",
+    "rol": null,
+    "autorizacionImagen": null,
+    "foto": null
+   },
+   {
+    "_id": "mt",
+    "tipo": "tecnico",
+    "nombre": "Laura",
+    "apellido": "Castro",
+    "numero": null,
+    "posicion": null,
+    "rol": "Entrenadora",
+    "autorizacionImagen": null,
+    "foto": null
+   }
+  ]
+ },
+ {
+  "_id": "cat-femenino",
+  "nombre": "Femenino",
+  "slug": "femenino",
+  "esMenores": false,
+  "personas": []
+ }
+]
