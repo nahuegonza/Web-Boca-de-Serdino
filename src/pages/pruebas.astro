@@ -1,0 +1,60 @@
+---
+import Base from '../layouts/Base.astro';
+import EstadoVacio from '../components/EstadoVacio.astro';
+import FormInscripcion from '../components/pruebas/FormInscripcion.astro';
+import { obtenerConfiguracion, obtenerConvocatorias } from '../lib/cms';
+import { enlaceWhatsApp } from '../lib/inscripcion';
+
+const [convocatorias, config] = await Promise.all([obtenerConvocatorias(), obtenerConfiguracion()]);
+const abiertas = convocatorias.filter((c) => c.categoria && Number.isInteger(c.anioDesde) && Number.isInteger(c.anioHasta));
+const avisame = enlaceWhatsApp(config.whatsapp, '¡Hola! Quiero que me avisen cuando haya pruebas en Boca de Serodino.');
+const rango = (a: number, b: number) => (a === b ? `Nacidos en ${a}` : `Nacidos entre ${Math.min(a, b)} y ${Math.max(a, b)}`);
+const genero = { mixto: null, masculino: 'Varones', femenino: 'Mujeres' } as const;
+---
+<Base titulo="Inscripción a pruebas" descripcion="Pruebas para jugar en Boca de Serodino: categorías, edades, días, horarios y qué llevar. Inscribite por WhatsApp.">
+  <div class="contenedor">
+    <h1 class="pagina-titulo">¿Querés jugar en Boca?</h1>
+    <p class="pruebas-bajada">Mirá cuándo se prueba tu categoría y anotate por WhatsApp. Te respondemos con los detalles.</p>
+
+    <section class="seccion" aria-labelledby="t-cuando">
+      <h2 class="seccion-titulo" id="t-cuando">Cuándo y dónde</h2>
+      {abiertas.length ? (
+        <ul class="pruebas-grilla">
+          {abiertas.map((c) => (
+            <li>
+              <article class="prueba">
+                <div class="prueba__cab">
+                  <h3 class="prueba__titulo">{c.categoria}</h3>
+                  {c.cupoAgotado ? <span class="bjs-estado bjs-estado--alerta">Cupo agotado</span> : <span class="bjs-estado bjs-estado--info">Inscripción abierta</span>}
+                </div>
+                <p class="prueba__edades">{rango(c.anioDesde, c.anioHasta)}{c.genero && genero[c.genero] ? `, ${genero[c.genero]}` : ''}</p>
+                <dl class="prueba__datos">
+                  {c.dias && <><dt>Días</dt><dd>{c.dias}</dd></>}
+                  {c.horario && <><dt>Horario</dt><dd>{c.horario}</dd></>}
+                  {c.lugar && <><dt>Lugar</dt><dd>{c.lugar}</dd></>}
+                </dl>
+                {c.queLlevar?.length ? (
+                  <>
+                    <p class="prueba__llevar">Qué llevar</p>
+                    <ul class="prueba__lista">{c.queLlevar.map((x) => <li>{x}</li>)}</ul>
+                  </>
+                ) : null}
+              </article>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <EstadoVacio titulo="No hay pruebas abiertas en este momento." accion={avisame ? { texto: 'Avisame cuando haya', href: avisame } : undefined}>
+          Escribinos y te avisamos cuando abramos la próxima convocatoria.
+        </EstadoVacio>
+      )}
+    </section>
+
+    {abiertas.some((c) => !c.cupoAgotado) && (
+      <section class="seccion" aria-labelledby="t-anotate">
+        <h2 class="seccion-titulo" id="t-anotate">Anotate</h2>
+        <FormInscripcion convocatorias={abiertas} whatsapp={config.whatsapp} />
+      </section>
+    )}
+  </div>
+</Base>
