@@ -1,0 +1,9 @@
+{
+ "bajada": "[Bajada de prueba: la Reserva juega antes, a las 14:00.]",
+ "imagenHero": {
+  "url": "http://localhost:4400/hero.jpg",
+  "ancho": 1920,
+  "alto": 1080,
+  "alt": "Foto de prueba de la cancha"
+ }
+}

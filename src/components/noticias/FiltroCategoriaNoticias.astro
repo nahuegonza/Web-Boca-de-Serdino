@@ -1,0 +1,18 @@
+---
+import { CATEGORIAS_NOTICIA } from '../../lib/noticias';
+interface Props { actual?: string }
+const { actual } = Astro.props;
+const opciones = [{ titulo: 'Todas', href: '/noticias', clave: undefined as string | undefined }, ...CATEGORIAS_NOTICIA.map((c) => ({ titulo: c.titulo, href: `/noticias/categoria/${c.slug}`, clave: c.slug }))];
+---
+<nav class="selector-cat" aria-label="Categorías de noticias">
+  <ul>
+    {opciones.map((o) => (
+      <li>
+        <a href={o.href} aria-current={o.clave === actual ? 'page' : undefined}>
+          {o.clave === actual && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>}
+          {o.titulo}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

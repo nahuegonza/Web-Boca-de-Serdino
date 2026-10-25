@@ -22,6 +22,7 @@ const esActual = (href: string) => actual === href || actual.startsWith(`${href}
         <span class="sitio-marca__nombre">Boca<span>de Serodino</span></span>
         <span class="bjs-sr">, ir al inicio</span>
       </a>
+      <a class="sitio-pruebas" href="/pruebas" aria-current={esActual('/pruebas') ? 'page' : undefined}>Pruebas</a>
       {secciones.length > 0 && (
         <button class="sitio-menu-btn" type="button" aria-expanded="false" aria-controls="menu-principal" data-menu-btn>
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>

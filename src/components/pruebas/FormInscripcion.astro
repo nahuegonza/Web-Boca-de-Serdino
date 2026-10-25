@@ -1,0 +1,189 @@
+---
+/**
+ * Formulario de inscripción, fase 1. Valida en el navegador y abre WhatsApp con el mensaje armado.
+ * No envía datos a ningún servidor del club ni los guarda. Sin JavaScript se ofrece el link directo.
+ */
+import type { Convocatoria } from '../../lib/cms';
+import { enlaceWhatsApp } from '../../lib/inscripcion';
+
+interface Props { convocatorias: Convocatoria[]; whatsapp?: string | null }
+const { convocatorias, whatsapp } = Astro.props;
+const directo = enlaceWhatsApp(whatsapp, '¡Hola! Quiero anotarme a las pruebas de Boca de Serodino.');
+const datosConvocatorias = JSON.stringify(convocatorias.filter((c) => !c.cupoAgotado).map(({ _id, categoria, anioDesde, anioHasta, genero }) => ({ _id, categoria, anioDesde, anioHasta, genero })));
+---
+{directo ? (
+  <div class="form-insc" data-form-inscripcion data-whatsapp={whatsapp} data-convocatorias={datosConvocatorias}>
+    <p class="form-insc__sinjs" data-sin-js>
+      <a class="bjs-btn bjs-btn--primario" href={directo} rel="noopener">Escribir por WhatsApp<span class="bjs-sr"> (abre WhatsApp)</span></a>
+    </p>
+
+    <form class="form-insc__form" novalidate hidden data-form>
+      <div class="bjs-error form-insc__resumen" role="alert" tabindex="-1" hidden data-resumen>
+        <strong>Revisá estos datos:</strong>
+        <ul data-resumen-lista></ul>
+      </div>
+
+      <fieldset class="form-insc__grupo">
+        <legend>Jugador o jugadora</legend>
+        <div class="bjs-campo">
+          <label class="bjs-label" for="nombreJugador">Nombre</label>
+          <span class="bjs-ayuda" id="nombreJugador-ayuda">Con el nombre de pila alcanza.</span>
+          <input class="bjs-input" id="nombreJugador" name="nombreJugador" type="text" autocomplete="off" maxlength="40" required aria-describedby="nombreJugador-ayuda nombreJugador-error" />
+          <span class="bjs-msj-error" id="nombreJugador-error" hidden></span>
+        </div>
+        <div class="bjs-campo">
+          <label class="bjs-label" for="anioNacimiento">Año de nacimiento</label>
+          <input class="bjs-input" id="anioNacimiento" name="anioNacimiento" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" required placeholder="Ej.: 2012" aria-describedby="anioNacimiento-error categoria-calculada" />
+          <span class="bjs-msj-error" id="anioNacimiento-error" hidden></span>
+          <output class="form-insc__categoria" id="categoria-calculada" for="anioNacimiento genero" aria-live="polite"></output>
+        </div>
+        <div class="bjs-campo">
+          <label class="bjs-label" for="genero">Se prueba en (opcional)</label>
+          <select class="bjs-input" id="genero" name="genero">
+            <option value="">Cualquiera</option>
+            <option value="masculino">Fútbol masculino</option>
+            <option value="femenino">Fútbol femenino</option>
+          </select>
+        </div>
+        <div class="bjs-campo">
+          <label class="bjs-label" for="posicion">Posición en la que juega (opcional)</label>
+          <select class="bjs-input" id="posicion" name="posicion">
+            <option value="">Todavía no sabe</option>
+            <option>Arquero</option>
+            <option>Defensor</option>
+            <option>Mediocampista</option>
+            <option>Delantero</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset class="form-insc__grupo" data-adulto hidden>
+        <legend>Adulto responsable</legend>
+        <p class="bjs-ayuda">Para menores de edad. El club te responde a este mismo WhatsApp.</p>
+        <div class="bjs-campo">
+          <label class="bjs-label" for="nombreAdulto">Tu nombre</label>
+          <input class="bjs-input" id="nombreAdulto" name="nombreAdulto" type="text" autocomplete="given-name" maxlength="40" aria-describedby="nombreAdulto-error" />
+          <span class="bjs-msj-error" id="nombreAdulto-error" hidden></span>
+        </div>
+        <div class="bjs-campo">
+          <label class="bjs-label" for="vinculo">Sos su</label>
+          <select class="bjs-input" id="vinculo" name="vinculo" aria-describedby="vinculo-error">
+            <option value="">Elegí una opción</option>
+            <option>Madre</option>
+            <option>Padre</option>
+            <option>Tutor o tutora</option>
+            <option>Otro familiar a cargo</option>
+          </select>
+          <span class="bjs-msj-error" id="vinculo-error" hidden></span>
+        </div>
+      </fieldset>
+
+      <fieldset class="form-insc__grupo">
+        <legend>Permisos</legend>
+        <div class="form-insc__check">
+          <input type="checkbox" id="consentimientoDatos" name="consentimientoDatos" aria-describedby="consentimientoDatos-detalle consentimientoDatos-error" />
+          <label for="consentimientoDatos">Acepto que el club use estos datos solo para organizar la prueba.</label>
+        </div>
+        <p class="bjs-ayuda" id="consentimientoDatos-detalle">El sitio no guarda nada: el mensaje se abre en tu WhatsApp y lo ves antes de enviarlo. El club usa los datos solo para contactarte por la prueba (Ley 25.326).</p>
+        <span class="bjs-msj-error" id="consentimientoDatos-error" hidden></span>
+
+        <div class="form-insc__radios" role="radiogroup" aria-labelledby="imagen-titulo" aria-describedby="autorizacionImagen-error">
+          <p class="bjs-label" id="imagen-titulo">¿Autorizás que el club saque y publique fotos durante la prueba?</p>
+          <div class="form-insc__check"><input type="radio" id="imagen-si" name="autorizacionImagen" value="si" /><label for="imagen-si">Sí, autorizo</label></div>
+          <div class="form-insc__check"><input type="radio" id="imagen-no" name="autorizacionImagen" value="no" /><label for="imagen-no">No autorizo</label></div>
+          <span class="bjs-msj-error" id="autorizacionImagen-error" hidden></span>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="bjs-btn bjs-btn--primario form-insc__enviar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 21l2.2-5.4A8.4 8.4 0 1 1 21 11.5z"></path></svg>
+        Abrir WhatsApp con el mensaje
+      </button>
+      <p class="bjs-ayuda">Se abre WhatsApp con el texto listo. Revisalo y tocá enviar.</p>
+    </form>
+  </div>
+) : (
+  <div class="bjs-error" role="alert">
+    <strong>No podemos armar el mensaje en este momento.</strong>
+    Falta el número de WhatsApp del club. Escribinos por Instagram o acercate a la secretaría.
+  </div>
+)}
+
+<script>
+  import { armarMensaje, categoriaPorAnio, enlaceWhatsApp, puedeSerMenor, validar, type DatosInscripcion, type Errores } from '../../lib/inscripcion';
+  import type { Convocatoria } from '../../lib/cms';
+
+  const caja = document.querySelector<HTMLElement>('[data-form-inscripcion]');
+  const form = caja?.querySelector<HTMLFormElement>('[data-form]');
+  if (caja && form) {
+    const convocatorias: Convocatoria[] = JSON.parse(caja.dataset.convocatorias || '[]');
+    const numero = caja.dataset.whatsapp ?? '';
+    const anioActual = new Date().getFullYear();
+    caja.querySelector<HTMLElement>('[data-sin-js]')!.hidden = true;
+    form.hidden = false;
+
+    const campo = (n: string) => form.elements.namedItem(n) as HTMLInputElement | HTMLSelectElement | RadioNodeList | null;
+    const valor = (n: string) => {
+      const c = campo(n);
+      return c && 'value' in c ? String(c.value ?? '') : '';
+    };
+    const leer = (): DatosInscripcion => ({
+      nombreJugador: valor('nombreJugador'),
+      anioNacimiento: valor('anioNacimiento'),
+      genero: valor('genero'),
+      posicion: valor('posicion'),
+      nombreAdulto: valor('nombreAdulto'),
+      vinculo: valor('vinculo'),
+      consentimientoDatos: (form.querySelector<HTMLInputElement>('#consentimientoDatos')?.checked) ?? false,
+      autorizacionImagen: (valor('autorizacionImagen') as DatosInscripcion['autorizacionImagen']) ?? '',
+    });
+
+    const adulto = form.querySelector<HTMLElement>('[data-adulto]')!;
+    const salida = form.querySelector<HTMLOutputElement>('#categoria-calculada')!;
+    const actualizar = () => {
+      const anio = Number(valor('anioNacimiento'));
+      const anioValido = /^\d{4}$/.test(valor('anioNacimiento'));
+      adulto.hidden = !(anioValido && puedeSerMenor(anio, anioActual));
+      if (!anioValido) { salida.textContent = ''; return; }
+      const c = categoriaPorAnio(anio, convocatorias, valor('genero') || undefined);
+      salida.textContent = c ? `Categoría: ${c.categoria}` : 'No hay pruebas abiertas para ese año. Escribinos igual y te avisamos.';
+    };
+    form.addEventListener('input', actualizar);
+    form.addEventListener('change', actualizar);
+
+    const ids = ['nombreJugador', 'anioNacimiento', 'nombreAdulto', 'vinculo', 'consentimientoDatos', 'autorizacionImagen'] as const;
+    const mostrarErrores = (errores: Errores) => {
+      const resumen = form.querySelector<HTMLElement>('[data-resumen]')!;
+      const lista = form.querySelector<HTMLElement>('[data-resumen-lista]')!;
+      lista.replaceChildren();
+      for (const id of ids) {
+        const msj = errores[id];
+        const span = form.querySelector<HTMLElement>(`#${id}-error`);
+        const control = id === 'autorizacionImagen' ? form.querySelector('[role="radiogroup"]') : form.querySelector(`#${id}`);
+        if (span) { span.textContent = msj ?? ''; span.hidden = !msj; }
+        control?.setAttribute('aria-invalid', msj ? 'true' : 'false');
+        if (msj) {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `#${id === 'autorizacionImagen' ? 'imagen-si' : id}`;
+          a.textContent = msj;
+          li.append(a);
+          lista.append(li);
+        }
+      }
+      resumen.hidden = !lista.children.length;
+      if (lista.children.length) resumen.focus();
+    };
+
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const datos = leer();
+      const errores = validar(datos, anioActual);
+      mostrarErrores(errores);
+      if (Object.keys(errores).length) return;
+      const conv = categoriaPorAnio(Number(datos.anioNacimiento), convocatorias, datos.genero || undefined);
+      const enlace = enlaceWhatsApp(numero, armarMensaje(datos, conv, anioActual));
+      if (enlace) window.location.href = enlace;
+    });
+  }
+</script>

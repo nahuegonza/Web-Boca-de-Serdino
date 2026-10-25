@@ -19,10 +19,22 @@ jobs:
       - run: npx astro check
       - name: Build sin CMS (verifica los estados vacíos)
         run: npm run build
-      - name: Build con datos de prueba
-        run: npm run build
-        env:
-          DATOS_DE_PRUEBA: '1'
+      - name: Build con datos de prueba (incluye optimización de imágenes)
+        run: npm run build:prueba
+
+  lighthouse:
+    # Perfil móvil con 4G simulado: falla si el LCP supera 2,5 s o la accesibilidad baja de 95.
+    runs-on: ubuntu-latest
+    needs: sitio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build:prueba
+      - run: npx --yes @lhci/cli@0.15 autorun
 
   panel:
     runs-on: ubuntu-latest

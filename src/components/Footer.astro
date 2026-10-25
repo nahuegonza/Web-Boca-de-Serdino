@@ -4,24 +4,30 @@ import type { Configuracion } from '../lib/cms';
 interface Props { config: Configuracion }
 const { config } = Astro.props;
 const nombre = config.nombreClub || 'Club Atlético Boca Juniors de Serodino';
-const whatsapp = config.whatsapp ? `https://wa.me/${config.whatsapp}` : null;
+const whatsapp = config.whatsapp ? `https://wa.me/${config.whatsapp.replace(/\D/g, '')}` : null;
+const lat = config.latitud ?? -32.6045;
+const lon = config.longitud ?? -60.94404;
+const mapa = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
 ---
 <footer class="sitio-footer">
   <div class="contenedor sitio-footer__grilla">
     <div>
       <h2>{nombre}</h2>
-      {config.direccion && <p class="sitio-footer__texto-suave">{config.direccion}</p>}
+      <p class="sitio-footer__texto-suave">{config.direccion || 'Serodino, Santa Fe'}</p>
+      <ul>
+        <li><a href={mapa} rel="noopener">Cómo llegar<span class="bjs-sr"> (abre Google Maps)</span></a></li>
+        <li><a href="/contacto#mapa">Ver el mapa</a></li>
+      </ul>
     </div>
-    {(whatsapp || config.email || config.instagram) && (
-      <div>
-        <h2>Contacto</h2>
-        <ul>
-          {whatsapp && <li><a href={whatsapp} rel="noopener">WhatsApp <span class="bjs-sr">(abre WhatsApp)</span></a></li>}
-          {config.email && <li><a href={`mailto:${config.email}`}>{config.email}</a></li>}
-          {config.instagram && <li><a href={config.instagram} rel="noopener">Instagram</a></li>}
-        </ul>
-      </div>
-    )}
+    <div>
+      <h2>Contacto</h2>
+      <ul>
+        {whatsapp && <li><a href={whatsapp} rel="noopener">WhatsApp<span class="bjs-sr"> (abre WhatsApp)</span></a></li>}
+        {config.email && <li><a href={`mailto:${config.email}`}>{config.email}</a></li>}
+        {config.instagram && <li><a href={config.instagram} rel="noopener">Instagram</a></li>}
+        <li><a href="/contacto">Formulario de contacto</a></li>
+      </ul>
+    </div>
     {config.horariosSecretaria && (
       <div>
         <h2>Secretaría</h2>

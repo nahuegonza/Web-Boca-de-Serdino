@@ -5,8 +5,8 @@ import type { Equipo } from '../../lib/cms';
 import { diaCorto, diaLargo, horaCorta, isoValido } from '../../lib/fechas';
 import Escudo from '../Escudo.astro';
 
-interface Props { vista: VistaPartido; propio: Equipo; categoria: string; idTitulo?: string }
-const { vista, propio, categoria, idTitulo = 'proximo-titulo' } = Astro.props;
+interface Props { vista: VistaPartido; propio: Equipo; categoria: string; idTitulo?: string; cuentaRegresiva?: boolean }
+const { vista, propio, categoria, idTitulo = 'proximo-titulo', cuentaRegresiva = false } = Astro.props;
 const p = vista.partido;
 const local = vista.condicion === 'local' ? propio : vista.rival;
 const visita = vista.condicion === 'local' ? vista.rival : propio;
@@ -37,6 +37,7 @@ const resumen = `${nombre(local)} contra ${nombre(visita)}, ${diaLargo(p.diaHora
       <span>Día a confirmar</span>
     )}
   </div>
+  {cuentaRegresiva && iso && <p class="tablero-cuenta" data-cuenta={iso} hidden></p>}
   <div class="bjs-tablero__pie">
     <span class="bjs-tablero__cancha">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--oro-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>

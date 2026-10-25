@@ -1,0 +1,67 @@
+---
+/**
+ * Publicaciones de Instagram elegidas por el club (links cargados en el CMS).
+ * Usa el embed oficial, sin scraping. El script de Instagram se carga recién cuando
+ * alguien toca "Mostrar acá": así la página no pesa más ni comparte datos con Meta sin acción.
+ */
+import { urlEmbedInstagram } from '../../lib/noticias';
+interface Props { urls?: string[] | null; perfil?: string | null }
+const { urls, perfil } = Astro.props;
+const validas = (urls ?? []).map(urlEmbedInstagram).filter((u): u is string => !!u).slice(0, 6);
+---
+{validas.length > 0 && (
+  <section class="seccion" aria-labelledby="t-instagram">
+    <h2 class="seccion-titulo" id="t-instagram">En Instagram</h2>
+    <p style="margin:0 0 var(--space-4);max-width:68ch;color:var(--texto-suave)">Al mostrar una publicación se cargan contenidos de Instagram (Meta).</p>
+    <ul class="ig-grilla">
+      {validas.map((url, i) => (
+        <li class="ig-item" data-ig={url}>
+          <div class="bjs-vacio ig-item__fachada">
+            <strong>Publicación {i + 1}</strong>
+            <div style="display:flex;flex-wrap:wrap;gap:var(--space-3)">
+              <button type="button" class="bjs-btn bjs-btn--secundario" data-ig-mostrar hidden>Mostrar acá</button>
+              <a class="bjs-link" href={url} rel="noopener" style="min-height:44px;display:inline-flex;align-items:center">Ver en Instagram</a>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+    {perfil && <p><a class="bjs-link" href={perfil} rel="noopener">Seguir al club en Instagram</a></p>}
+  </section>
+)}
+
+<script>
+  let cargado: Promise<void> | null = null;
+  const cargarScript = () =>
+    (cargado ??= new Promise((resolver, rechazar) => {
+      const s = document.createElement('script');
+      s.src = 'https://www.instagram.com/embed.js';
+      s.async = true;
+      s.onload = () => resolver();
+      s.onerror = () => rechazar(new Error('instagram'));
+      document.body.appendChild(s);
+    }));
+
+  document.querySelectorAll<HTMLElement>('[data-ig]').forEach((item) => {
+    const boton = item.querySelector<HTMLButtonElement>('[data-ig-mostrar]');
+    if (!boton) return;
+    boton.hidden = false;
+    boton.addEventListener('click', async () => {
+      boton.setAttribute('aria-busy', 'true');
+      boton.textContent = 'Cargando…';
+      const cita = document.createElement('blockquote');
+      cita.className = 'instagram-media';
+      cita.dataset.instgrmPermalink = item.dataset.ig;
+      cita.dataset.instgrmVersion = '14';
+      try {
+        await cargarScript();
+        item.replaceChildren(cita);
+        (window as unknown as { instgrm?: { Embeds: { process: () => void } } }).instgrm?.Embeds.process();
+      } catch {
+        boton.removeAttribute('aria-busy');
+        boton.textContent = 'No se pudo cargar. Probá con "Ver en Instagram"';
+        boton.disabled = true;
+      }
+    });
+  });
+</script>

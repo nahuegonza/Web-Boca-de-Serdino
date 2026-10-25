@@ -1,0 +1,76 @@
+---
+/**
+ * Tablero del próximo partido con selector de categoría.
+ * Sin JavaScript se ve Primera y un link al resto. Con JavaScript, los chips cambian el tablero
+ * y la elección se recuerda en este navegador (1 toque la primera vez, 0 las siguientes).
+ */
+import type { Equipo } from '../../lib/cms';
+import type { VistaPartido } from '../../lib/fixture';
+import Tablero from '../fixture/Tablero.astro';
+import EstadoVacio from '../EstadoVacio.astro';
+
+interface Item { slug: string; nombre: string; vista: VistaPartido; propio: Equipo }
+interface Props { items: Item[] }
+const { items } = Astro.props;
+const inicial = items.find((i) => i.slug === 'primera') ?? items[0];
+---
+<section class="proximos" aria-label="Próximo partido" data-proximos data-inicial={inicial?.slug}>
+  {items.length > 1 && (
+    <div class="proximos__chips" role="group" aria-label="Elegí la categoría" data-chips hidden>
+      {items.map((i) => (
+        <button type="button" class="filtro-pos__chip" aria-pressed={i === inicial ? 'true' : 'false'} data-cat={i.slug}>{i.nombre}</button>
+      ))}
+    </div>
+  )}
+  {items.length ? (
+    items.map((i) => (
+      <div data-tablero={i.slug} hidden={i !== inicial}>
+        <Tablero vista={i.vista} propio={i.propio} categoria={i.nombre} idTitulo={`proximo-${i.slug}`} cuentaRegresiva />
+      </div>
+    ))
+  ) : (
+    <EstadoVacio titulo="Todavía no hay próximo partido cargado." accion={{ texto: 'Ver el fixture', href: '/fixture' }}>
+      El fixture se publica cuando la liga confirma las fechas.
+    </EstadoVacio>
+  )}
+  {items.length > 1 && <p class="proximos__otras" data-otras><a class="bjs-link" href="/fixture">Partidos de todas las categorías</a></p>}
+</section>
+
+<script>
+  import { textoCuentaRegresiva } from '../../lib/home';
+
+  const caja = document.querySelector<HTMLElement>('[data-proximos]');
+  if (caja) {
+    const chips = caja.querySelector<HTMLElement>('[data-chips]');
+    const botones = [...caja.querySelectorAll<HTMLButtonElement>('[data-cat]')];
+    const tableros = [...caja.querySelectorAll<HTMLElement>('[data-tablero]')];
+    const CLAVE = 'boca-categoria';
+    const elegir = (slug: string, guardar: boolean) => {
+      if (!tableros.some((t) => t.dataset.tablero === slug)) return;
+      tableros.forEach((t) => (t.hidden = t.dataset.tablero !== slug));
+      botones.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cat === slug)));
+      if (guardar) {
+        try { localStorage.setItem(CLAVE, slug); } catch { /* sin almacenamiento: no pasa nada */ }
+      }
+    };
+    if (chips) {
+      chips.hidden = false;
+      botones.forEach((b) => b.addEventListener('click', () => elegir(b.dataset.cat ?? '', true)));
+      try {
+        const guardada = localStorage.getItem(CLAVE);
+        if (guardada) elegir(guardada, false);
+      } catch { /* sin almacenamiento */ }
+    }
+
+    // Cuenta regresiva: se actualiza cada minuto, sin anunciar cada cambio al lector de pantalla.
+    const cuentas = [...caja.querySelectorAll<HTMLElement>('[data-cuenta]')];
+    const actualizar = () =>
+      cuentas.forEach((c) => {
+        const texto = textoCuentaRegresiva(Date.parse(c.dataset.cuenta ?? ''));
+        c.textContent = texto ?? '';
+        c.hidden = !texto;
+      });
+    actualizar();
+    if (cuentas.length) setInterval(actualizar, 60_000);
+  }
+</script>

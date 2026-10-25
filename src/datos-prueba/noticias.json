@@ -1,0 +1,1116 @@
+[
+ {
+  "_id": "n1",
+  "titulo": "[Crónica de prueba: la Primera ganó 2 a 1 en casa]",
+  "slug": "noticia-de-prueba-1",
+  "fecha": "2026-10-24T15:00:00Z",
+  "categoria": "futbol",
+  "resumen": "[Resumen de prueba en una o dos líneas, contado como lo contaría alguien del club.]",
+  "imagen": {
+   "url": "http://localhost:4400/noticia1.jpg",
+   "ancho": 1600,
+   "alto": 1000,
+   "alt": "Foto de prueba de la noticia"
+  },
+  "cuerpo": [
+   {
+    "_type": "block",
+    "_key": "54761906",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo de prueba. El texto real lo carga la comisión desde el panel.]",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "24426248",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Subtítulo de prueba",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "42849566",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Primer punto de una lista",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "12693045",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Segundo punto",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "image",
+    "_key": "im",
+    "url": "http://localhost:4400/noticia2.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto de prueba dentro del texto",
+    "epigrafe": "Epígrafe de prueba"
+   },
+   {
+    "_type": "block",
+    "_key": "19235335",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo final de prueba.]",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "galeria": [
+   {
+    "url": "http://localhost:4400/noticia3.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto 3 de la galería de prueba"
+   },
+   {
+    "url": "http://localhost:4400/noticia5.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto 5 de la galería de prueba"
+   },
+   {
+    "url": "http://localhost:4400/noticia6.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto 6 de la galería de prueba"
+   }
+  ]
+ },
+ {
+  "_id": "n2",
+  "titulo": "[Título de noticia de prueba 2]",
+  "slug": "noticia-de-prueba-2",
+  "fecha": "2026-10-23T15:00:00Z",
+  "categoria": "institucional",
+  "resumen": "[Resumen de prueba en una o dos líneas, contado como lo contaría alguien del club.]",
+  "imagen": {
+   "url": "http://localhost:4400/noticia2.jpg",
+   "ancho": 1600,
+   "alto": 1000,
+   "alt": "Foto de prueba de la noticia"
+  },
+  "cuerpo": [
+   {
+    "_type": "block",
+    "_key": "54761906",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo de prueba. El texto real lo carga la comisión desde el panel.]",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "24426248",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Subtítulo de prueba",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "42849566",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Primer punto de una lista",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "12693045",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Segundo punto",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "image",
+    "_key": "im",
+    "url": "http://localhost:4400/noticia2.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto de prueba dentro del texto",
+    "epigrafe": "Epígrafe de prueba"
+   },
+   {
+    "_type": "block",
+    "_key": "19235335",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo final de prueba.]",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "galeria": null
+ },
+ {
+  "_id": "n3",
+  "titulo": "[Título de noticia de prueba 3]",
+  "slug": "noticia-de-prueba-3",
+  "fecha": "2026-10-22T15:00:00Z",
+  "categoria": "eventos",
+  "resumen": "[Resumen de prueba en una o dos líneas, contado como lo contaría alguien del club.]",
+  "imagen": {
+   "url": "http://localhost:4400/noticia3.jpg",
+   "ancho": 1600,
+   "alto": 1000,
+   "alt": "Foto de prueba de la noticia"
+  },
+  "cuerpo": [
+   {
+    "_type": "block",
+    "_key": "54761906",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo de prueba. El texto real lo carga la comisión desde el panel.]",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "24426248",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Subtítulo de prueba",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "42849566",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Primer punto de una lista",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "12693045",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Segundo punto",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "image",
+    "_key": "im",
+    "url": "http://localhost:4400/noticia2.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto de prueba dentro del texto",
+    "epigrafe": "Epígrafe de prueba"
+   },
+   {
+    "_type": "block",
+    "_key": "19235335",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo final de prueba.]",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "galeria": null
+ },
+ {
+  "_id": "n4",
+  "titulo": "[Título de noticia de prueba 4]",
+  "slug": "noticia-de-prueba-4",
+  "fecha": "2026-10-21T15:00:00Z",
+  "categoria": "futbol",
+  "resumen": "[Resumen de prueba en una o dos líneas, contado como lo contaría alguien del club.]",
+  "imagen": null,
+  "cuerpo": [
+   {
+    "_type": "block",
+    "_key": "54761906",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo de prueba. El texto real lo carga la comisión desde el panel.]",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "24426248",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Subtítulo de prueba",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "42849566",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Primer punto de una lista",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "12693045",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Segundo punto",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "image",
+    "_key": "im",
+    "url": "http://localhost:4400/noticia2.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto de prueba dentro del texto",
+    "epigrafe": "Epígrafe de prueba"
+   },
+   {
+    "_type": "block",
+    "_key": "19235335",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo final de prueba.]",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "galeria": null
+ },
+ {
+  "_id": "n5",
+  "titulo": "[Título de noticia de prueba 5]",
+  "slug": "noticia-de-prueba-5",
+  "fecha": "2026-10-20T15:00:00Z",
+  "categoria": "inferiores",
+  "resumen": "[Resumen de prueba en una o dos líneas, contado como lo contaría alguien del club.]",
+  "imagen": {
+   "url": "http://localhost:4400/noticia5.jpg",
+   "ancho": 1600,
+   "alto": 1000,
+   "alt": "Foto de prueba de la noticia"
+  },
+  "cuerpo": [
+   {
+    "_type": "block",
+    "_key": "54761906",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo de prueba. El texto real lo carga la comisión desde el panel.]",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "24426248",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Subtítulo de prueba",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "42849566",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Primer punto de una lista",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "12693045",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Segundo punto",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "image",
+    "_key": "im",
+    "url": "http://localhost:4400/noticia2.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto de prueba dentro del texto",
+    "epigrafe": "Epígrafe de prueba"
+   },
+   {
+    "_type": "block",
+    "_key": "19235335",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo final de prueba.]",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "galeria": null
+ },
+ {
+  "_id": "n6",
+  "titulo": "[Título de noticia de prueba 6]",
+  "slug": "noticia-de-prueba-6",
+  "fecha": "2026-10-19T15:00:00Z",
+  "categoria": "institucional",
+  "resumen": "[Resumen de prueba en una o dos líneas, contado como lo contaría alguien del club.]",
+  "imagen": {
+   "url": "http://localhost:4400/noticia6.jpg",
+   "ancho": 1600,
+   "alto": 1000,
+   "alt": "Foto de prueba de la noticia"
+  },
+  "cuerpo": [
+   {
+    "_type": "block",
+    "_key": "54761906",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo de prueba. El texto real lo carga la comisión desde el panel.]",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "24426248",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Subtítulo de prueba",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "42849566",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Primer punto de una lista",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "12693045",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Segundo punto",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "image",
+    "_key": "im",
+    "url": "http://localhost:4400/noticia2.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto de prueba dentro del texto",
+    "epigrafe": "Epígrafe de prueba"
+   },
+   {
+    "_type": "block",
+    "_key": "19235335",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo final de prueba.]",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "galeria": null
+ },
+ {
+  "_id": "n7",
+  "titulo": "[Título de noticia de prueba 7]",
+  "slug": "noticia-de-prueba-7",
+  "fecha": "2026-10-18T15:00:00Z",
+  "categoria": "eventos",
+  "resumen": "[Resumen de prueba en una o dos líneas, contado como lo contaría alguien del club.]",
+  "imagen": {
+   "url": "http://localhost:4400/noticia7.jpg",
+   "ancho": 1600,
+   "alto": 1000,
+   "alt": "Foto de prueba de la noticia"
+  },
+  "cuerpo": [
+   {
+    "_type": "block",
+    "_key": "54761906",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo de prueba. El texto real lo carga la comisión desde el panel.]",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "24426248",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Subtítulo de prueba",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "42849566",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Primer punto de una lista",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "12693045",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Segundo punto",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "image",
+    "_key": "im",
+    "url": "http://localhost:4400/noticia2.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto de prueba dentro del texto",
+    "epigrafe": "Epígrafe de prueba"
+   },
+   {
+    "_type": "block",
+    "_key": "19235335",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo final de prueba.]",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "galeria": null
+ },
+ {
+  "_id": "n8",
+  "titulo": "[Título de noticia de prueba 8]",
+  "slug": "noticia-de-prueba-8",
+  "fecha": "2026-10-17T15:00:00Z",
+  "categoria": "futbol",
+  "resumen": "[Resumen de prueba en una o dos líneas, contado como lo contaría alguien del club.]",
+  "imagen": {
+   "url": "http://localhost:4400/noticia1.jpg",
+   "ancho": 1600,
+   "alto": 1000,
+   "alt": "Foto de prueba de la noticia"
+  },
+  "cuerpo": [
+   {
+    "_type": "block",
+    "_key": "54761906",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo de prueba. El texto real lo carga la comisión desde el panel.]",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "24426248",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Subtítulo de prueba",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "42849566",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Primer punto de una lista",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "12693045",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Segundo punto",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "image",
+    "_key": "im",
+    "url": "http://localhost:4400/noticia2.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto de prueba dentro del texto",
+    "epigrafe": "Epígrafe de prueba"
+   },
+   {
+    "_type": "block",
+    "_key": "19235335",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo final de prueba.]",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "galeria": null
+ },
+ {
+  "_id": "n9",
+  "titulo": "[Título de noticia de prueba 9]",
+  "slug": "noticia-de-prueba-9",
+  "fecha": "2026-10-16T15:00:00Z",
+  "categoria": "inferiores",
+  "resumen": "[Resumen de prueba en una o dos líneas, contado como lo contaría alguien del club.]",
+  "imagen": {
+   "url": "http://localhost:4400/noticia2.jpg",
+   "ancho": 1600,
+   "alto": 1000,
+   "alt": "Foto de prueba de la noticia"
+  },
+  "cuerpo": [
+   {
+    "_type": "block",
+    "_key": "54761906",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo de prueba. El texto real lo carga la comisión desde el panel.]",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "24426248",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Subtítulo de prueba",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "42849566",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Primer punto de una lista",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "12693045",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Segundo punto",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "image",
+    "_key": "im",
+    "url": "http://localhost:4400/noticia2.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto de prueba dentro del texto",
+    "epigrafe": "Epígrafe de prueba"
+   },
+   {
+    "_type": "block",
+    "_key": "19235335",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo final de prueba.]",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "galeria": null
+ },
+ {
+  "_id": "n10",
+  "titulo": "[Título de noticia de prueba 10]",
+  "slug": "noticia-de-prueba-10",
+  "fecha": "2026-10-15T15:00:00Z",
+  "categoria": "institucional",
+  "resumen": "[Resumen de prueba en una o dos líneas, contado como lo contaría alguien del club.]",
+  "imagen": {
+   "url": "http://localhost:4400/noticia3.jpg",
+   "ancho": 1600,
+   "alto": 1000,
+   "alt": "Foto de prueba de la noticia"
+  },
+  "cuerpo": [
+   {
+    "_type": "block",
+    "_key": "54761906",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo de prueba. El texto real lo carga la comisión desde el panel.]",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "24426248",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Subtítulo de prueba",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "42849566",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Primer punto de una lista",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "12693045",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Segundo punto",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "image",
+    "_key": "im",
+    "url": "http://localhost:4400/noticia2.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto de prueba dentro del texto",
+    "epigrafe": "Epígrafe de prueba"
+   },
+   {
+    "_type": "block",
+    "_key": "19235335",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo final de prueba.]",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "galeria": null
+ },
+ {
+  "_id": "n11",
+  "titulo": "[Título de noticia de prueba 11]",
+  "slug": "noticia-de-prueba-11",
+  "fecha": "2026-10-14T15:00:00Z",
+  "categoria": "eventos",
+  "resumen": "[Resumen de prueba en una o dos líneas, contado como lo contaría alguien del club.]",
+  "imagen": {
+   "url": "http://localhost:4400/noticia4.jpg",
+   "ancho": 1600,
+   "alto": 1000,
+   "alt": "Foto de prueba de la noticia"
+  },
+  "cuerpo": [
+   {
+    "_type": "block",
+    "_key": "54761906",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo de prueba. El texto real lo carga la comisión desde el panel.]",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "24426248",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Subtítulo de prueba",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "42849566",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Primer punto de una lista",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "block",
+    "_key": "12693045",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "Segundo punto",
+      "marks": []
+     }
+    ],
+    "listItem": "bullet",
+    "level": 1
+   },
+   {
+    "_type": "image",
+    "_key": "im",
+    "url": "http://localhost:4400/noticia2.jpg",
+    "ancho": 1600,
+    "alto": 1000,
+    "alt": "Foto de prueba dentro del texto",
+    "epigrafe": "Epígrafe de prueba"
+   },
+   {
+    "_type": "block",
+    "_key": "19235335",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Párrafo final de prueba.]",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "galeria": null
+ }
+]

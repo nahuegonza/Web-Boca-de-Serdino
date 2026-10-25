@@ -1,0 +1,31 @@
+---
+import type { NoticiaResumen } from '../../lib/cms';
+import { tituloCategoria } from '../../lib/noticias';
+import { diaLargo, isoValido } from '../../lib/fechas';
+import Imagen from '../Imagen.astro';
+
+interface Props { noticia: NoticiaResumen; nivel?: 'h2' | 'h3'; destacada?: boolean; prioridad?: boolean }
+const { noticia, nivel = 'h3', destacada = false, prioridad = false } = Astro.props;
+const Titulo = nivel;
+---
+<article class:list={['bjs-noticia', 'noticia-card', { 'noticia-card--destacada': destacada }]}>
+  <div class="noticia-card__img">
+    <Imagen
+      imagen={noticia.imagen}
+      ancho={800}
+      alto={500}
+      anchos={[360, 560, 800, 1120]}
+      sizes={destacada ? '(min-width: 64rem) 640px, 100vw' : '(min-width: 64rem) 360px, (min-width: 48rem) 45vw, 100vw'}
+      alt=""
+      prioridad={prioridad}
+    />
+  </div>
+  <div class="bjs-noticia__cuerpo">
+    <p class="bjs-noticia__fecha">
+      <span class="noticia-card__cat">{tituloCategoria(noticia.categoria)}</span>
+      <time datetime={isoValido(noticia.fecha)}>{diaLargo(noticia.fecha)}</time>
+    </p>
+    <Titulo class="bjs-noticia__titulo"><a href={`/noticias/${noticia.slug}`}>{noticia.titulo}</a></Titulo>
+    {noticia.resumen && <p class="bjs-noticia__resumen">{noticia.resumen}</p>}
+  </div>
+</article>

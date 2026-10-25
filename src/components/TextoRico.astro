@@ -1,0 +1,42 @@
+---
+/**
+ * Texto enriquecido del CMS. El texto se convierte a HTML con escape seguro;
+ * cada foto del cuerpo se optimiza por separado con el componente de imagen.
+ */
+import { toHTML } from '@portabletext/to-html';
+import type { TextoRico as Bloques, ImagenCMS } from '../lib/cms';
+import { dividirCuerpo } from '../lib/noticias';
+import Imagen from './Imagen.astro';
+
+interface Props { bloques?: Bloques | null; class?: string }
+const { bloques, class: clase } = Astro.props;
+const tramos = dividirCuerpo(bloques);
+
+const escapar = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+const html = (b: Bloques) =>
+  toHTML(b as never, {
+    components: {
+      marks: {
+        link: ({ children, value }) => {
+          const href = typeof value?.href === 'string' && /^(https?:|mailto:)/.test(value.href) ? value.href : null;
+          if (!href) return children;
+          const externo = /^https?:/.test(href) && !href.startsWith(String(Astro.site));
+          return `<a href="${escapar(href)}"${externo ? ' rel="noopener"' : ''}>${children}</a>`;
+        },
+      },
+    },
+    onMissingComponent: false,
+  });
+---
+<div class:list={['texto-rico', clase]}>
+  {tramos.map((t) =>
+    t.tipo === 'texto' ? (
+      <Fragment set:html={html(t.bloques)} />
+    ) : (
+      <figure class="texto-rico__figura">
+        <Imagen imagen={t.bloque as unknown as ImagenCMS} ancho={1200} alto={Math.round((1200 * Number(t.bloque.alto || 750)) / Number(t.bloque.ancho || 1200))} anchos={[360, 640, 960, 1200]} sizes="(min-width: 48rem) 680px, 100vw" />
+        {t.bloque.epigrafe && <figcaption>{String(t.bloque.epigrafe)}</figcaption>}
+      </figure>
+    ),
+  )}
+</div>

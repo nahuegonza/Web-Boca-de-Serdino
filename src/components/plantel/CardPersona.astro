@@ -1,0 +1,29 @@
+---
+/** Card de jugador o técnico. Nunca muestra fecha de nacimiento ni datos de contacto. */
+import type { PersonaPublica } from '../../lib/plantel';
+import Imagen from '../Imagen.astro';
+
+interface Props { persona: PersonaPublica; categoria: string; tecnico?: boolean }
+const { persona, categoria, tecnico = false } = Astro.props;
+const detalle = tecnico ? persona.rol : persona.posicionTexto;
+---
+<article class="bjs-jugador persona" data-posicion={persona.posicion ?? 'sin-posicion'}>
+  <div class="bjs-jugador__foto persona__foto">
+    <Imagen
+      imagen={persona.foto}
+      ancho={400}
+      alto={500}
+      anchos={[200, 320, 400, 640]}
+      sizes="(min-width: 64rem) 220px, (min-width: 48rem) 30vw, 46vw"
+      alt=""
+    />
+    {!tecnico && persona.numero != null && (
+      <span class="bjs-jugador__dorsal"><span class="bjs-sr">Número </span>{persona.numero}</span>
+    )}
+  </div>
+  <div class="bjs-jugador__info">
+    <h3 class="bjs-jugador__nombre">{persona.nombre}</h3>
+    {detalle && <span class="bjs-jugador__pos">{detalle}</span>}
+    <span class="bjs-cat">{categoria}</span>
+  </div>
+</article>

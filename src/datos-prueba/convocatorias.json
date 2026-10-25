@@ -1,0 +1,49 @@
+[
+ {
+  "_id": "c1",
+  "categoria": "Sub-13",
+  "anioDesde": 2013,
+  "anioHasta": 2014,
+  "genero": "mixto",
+  "dias": "[Sábado 9 de noviembre]",
+  "horario": "[10 a 12 h]",
+  "lugar": "Cancha del club",
+  "queLlevar": [
+   "Botines",
+   "Canilleras",
+   "Agua"
+  ],
+  "cupoAgotado": false
+ },
+ {
+  "_id": "c2",
+  "categoria": "Sub-15",
+  "anioDesde": 2011,
+  "anioHasta": 2012,
+  "genero": "mixto",
+  "dias": "[Sábado 9 de noviembre]",
+  "horario": "[15 a 17 h]",
+  "lugar": "Cancha del club",
+  "queLlevar": [
+   "Botines",
+   "Canilleras",
+   "Agua"
+  ],
+  "cupoAgotado": false
+ },
+ {
+  "_id": "c3",
+  "categoria": "Femenino",
+  "anioDesde": 2008,
+  "anioHasta": 2014,
+  "genero": "femenino",
+  "dias": "[Martes y jueves]",
+  "horario": "[18 a 19:30 h]",
+  "lugar": "Cancha del club",
+  "queLlevar": [
+   "Ropa deportiva",
+   "Agua"
+  ],
+  "cupoAgotado": true
+ }
+]

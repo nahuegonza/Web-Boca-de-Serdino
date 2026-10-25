@@ -1,0 +1,85 @@
+---
+/**
+ * Galería de fotos. Sin JavaScript, cada miniatura abre la foto grande.
+ * Con JavaScript, se abre un visor (<dialog>) con anterior/siguiente, flechas del teclado y Escape.
+ */
+import { getImage } from 'astro:assets';
+import type { ImagenCMS } from '../lib/cms';
+import Imagen from './Imagen.astro';
+
+interface Props { fotos: (ImagenCMS & { epigrafe?: string | null; anio?: number | null })[]; titulo: string; id: string }
+const { fotos, titulo, id } = Astro.props;
+const validas = fotos.filter((f) => f?.url);
+const grandes = await Promise.all(
+  validas.map((f) => getImage({ src: f.url, width: Math.min(1600, f.ancho || 1600), height: Math.round((Math.min(1600, f.ancho || 1600) * (f.alto || 1000)) / (f.ancho || 1600)), format: 'webp' })),
+);
+const leyenda = (f: (typeof validas)[number]) => [f.anio, f.epigrafe].filter(Boolean).join('. ');
+---
+{validas.length > 0 && (
+  <div class="galeria" data-galeria={id}>
+    <ul class="galeria__grilla">
+      {validas.map((f, i) => (
+        <li>
+          <a class="galeria__item" href={grandes[i].src} data-indice={i} data-grande={grandes[i].src} data-alt={f.alt ?? ''} data-leyenda={leyenda(f)}>
+            <Imagen imagen={f} ancho={400} alto={300} anchos={[200, 400, 600]} sizes="(min-width: 64rem) 280px, (min-width: 48rem) 30vw, 48vw" alt={f.alt ?? ''} />
+            <span class="bjs-sr">Ampliar foto {i + 1} de {validas.length}</span>
+          </a>
+          {leyenda(f) && <p class="galeria__leyenda">{leyenda(f)}</p>}
+        </li>
+      ))}
+    </ul>
+    <dialog class="visor" aria-label={`${titulo}: visor de fotos`}>
+      <div class="visor__barra">
+        <span class="visor__contador" aria-live="polite"></span>
+        <button type="button" class="visor__btn" data-cerrar>Cerrar</button>
+      </div>
+      <figure class="visor__figura">
+        <img alt="" class="visor__img" />
+        <figcaption class="visor__leyenda"></figcaption>
+      </figure>
+      <div class="visor__nav">
+        <button type="button" class="visor__btn" data-anterior>Anterior</button>
+        <button type="button" class="visor__btn" data-siguiente>Siguiente</button>
+      </div>
+    </dialog>
+  </div>
+)}
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-galeria]').forEach((galeria) => {
+    const visor = galeria.querySelector('dialog');
+    const items = [...galeria.querySelectorAll<HTMLAnchorElement>('a[data-grande]')];
+    if (!visor || !items.length || typeof visor.showModal !== 'function') return;
+    const img = visor.querySelector<HTMLImageElement>('.visor__img')!;
+    const leyenda = visor.querySelector<HTMLElement>('.visor__leyenda')!;
+    const contador = visor.querySelector<HTMLElement>('.visor__contador')!;
+    let actual = 0;
+    let origen: HTMLElement | null = null;
+    const mostrar = (i: number) => {
+      actual = (i + items.length) % items.length;
+      const a = items[actual];
+      img.src = a.dataset.grande ?? '';
+      img.alt = a.dataset.alt ?? '';
+      leyenda.textContent = a.dataset.leyenda ?? '';
+      leyenda.hidden = !a.dataset.leyenda;
+      contador.textContent = `Foto ${actual + 1} de ${items.length}`;
+    };
+    items.forEach((a, i) =>
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        origen = a;
+        mostrar(i);
+        visor.showModal();
+      }),
+    );
+    visor.querySelector('[data-cerrar]')?.addEventListener('click', () => visor.close());
+    visor.querySelector('[data-anterior]')?.addEventListener('click', () => mostrar(actual - 1));
+    visor.querySelector('[data-siguiente]')?.addEventListener('click', () => mostrar(actual + 1));
+    visor.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') mostrar(actual - 1);
+      if (e.key === 'ArrowRight') mostrar(actual + 1);
+    });
+    visor.addEventListener('click', (e) => { if (e.target === visor) visor.close(); });
+    visor.addEventListener('close', () => origen?.focus());
+  });
+</script>

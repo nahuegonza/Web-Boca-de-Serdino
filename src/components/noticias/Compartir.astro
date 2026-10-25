@@ -1,0 +1,45 @@
+---
+import { enlacesCompartir } from '../../lib/noticias';
+interface Props { url: string; titulo: string }
+const { url, titulo } = Astro.props;
+const e = enlacesCompartir(url, titulo);
+---
+<div class="compartir" data-compartir data-url={url} data-titulo={titulo}>
+  <p class="compartir__titulo" id="compartir-titulo">Compartir</p>
+  <ul class="compartir__lista" aria-labelledby="compartir-titulo">
+    <li data-nativo hidden><button type="button" class="bjs-btn bjs-btn--primario" data-compartir-nativo>Compartir</button></li>
+    <li><a class="bjs-btn bjs-btn--secundario" href={e.whatsapp} rel="noopener">WhatsApp<span class="bjs-sr"> (abre WhatsApp)</span></a></li>
+    <li><a class="bjs-btn bjs-btn--secundario" href={e.facebook} rel="noopener">Facebook</a></li>
+    <li><a class="bjs-btn bjs-btn--secundario" href={e.x} rel="noopener">X</a></li>
+    <li data-copiar hidden><button type="button" class="bjs-btn bjs-btn--secundario" data-copiar-btn>Copiar link</button></li>
+  </ul>
+  <p class="bjs-sr" aria-live="polite" data-compartir-estado></p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-compartir]').forEach((caja) => {
+    const url = caja.dataset.url ?? location.href;
+    const titulo = caja.dataset.titulo ?? document.title;
+    const estado = caja.querySelector<HTMLElement>('[data-compartir-estado]');
+    if (typeof navigator.share === 'function') {
+      caja.querySelector<HTMLElement>('[data-nativo]')!.hidden = false;
+      caja.querySelector('[data-compartir-nativo]')?.addEventListener('click', () => {
+        navigator.share({ title: titulo, url }).catch(() => {});
+      });
+    }
+    if (navigator.clipboard) {
+      caja.querySelector<HTMLElement>('[data-copiar]')!.hidden = false;
+      const boton = caja.querySelector<HTMLButtonElement>('[data-copiar-btn]')!;
+      boton.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(url);
+          boton.textContent = 'Link copiado';
+          if (estado) estado.textContent = 'Link copiado';
+        } catch {
+          boton.textContent = 'No se pudo copiar';
+        }
+        setTimeout(() => (boton.textContent = 'Copiar link'), 2500);
+      });
+    }
+  });
+</script>

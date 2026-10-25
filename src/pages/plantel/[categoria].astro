@@ -1,0 +1,90 @@
+---
+import Base from '../../layouts/Base.astro';
+import SelectorCategoriaPlantel from '../../components/plantel/SelectorCategoriaPlantel.astro';
+import CardPersona from '../../components/plantel/CardPersona.astro';
+import EstadoVacio from '../../components/EstadoVacio.astro';
+import { obtenerPlantel, type CategoriaPlantel } from '../../lib/cms';
+import { prepararPlantel } from '../../lib/plantel';
+
+export async function getStaticPaths() {
+  const categorias = await obtenerPlantel();
+  return categorias.filter((c) => c.slug).map((c) => ({ params: { categoria: c.slug }, props: { categoria: c, todas: categorias } }));
+}
+
+interface Props { categoria: CategoriaPlantel; todas: CategoriaPlantel[] }
+const { categoria, todas } = Astro.props;
+const plantel = prepararPlantel(categoria);
+const conPersonas = todas.filter((c) => c.personas?.length);
+const otra = conPersonas.find((c) => c.slug !== categoria.slug);
+---
+<Base titulo={`Plantel de ${categoria.nombre}`} descripcion={`Jugadores y cuerpo técnico de ${categoria.nombre} de Boca de Serodino.`}>
+  <div class="contenedor">
+    <h1 class="pagina-titulo">Plantel</h1>
+    <SelectorCategoriaPlantel categorias={todas} actual={categoria.slug} base="/plantel" />
+
+    {plantel.totalJugadores === 0 && plantel.tecnicos.length === 0 ? (
+      <div class="seccion">
+        <EstadoVacio
+          titulo={`Todavía no cargamos el plantel de ${categoria.nombre}.`}
+          accion={otra ? { texto: `Ver ${otra.nombre}`, href: `/plantel/${otra.slug}` } : undefined}
+        >
+          Lo sumamos apenas el cuerpo técnico confirme la lista.
+        </EstadoVacio>
+      </div>
+    ) : (
+      <>
+        {plantel.grupos.length > 1 && (
+          <div class="filtro-pos" data-filtro hidden>
+            <p class="filtro-pos__titulo" id="filtro-titulo">Filtrar por posición</p>
+            <div class="bjs-chips" role="group" aria-labelledby="filtro-titulo">
+              <button type="button" class="filtro-pos__chip" aria-pressed="true" data-valor="todas">Todas</button>
+              {plantel.grupos.map((g) => (
+                <button type="button" class="filtro-pos__chip" aria-pressed="false" data-valor={g.posicion}>{g.titulo}</button>
+              ))}
+            </div>
+            <p class="bjs-sr" aria-live="polite" data-filtro-estado></p>
+          </div>
+        )}
+
+        {plantel.grupos.map((g) => (
+          <section class="seccion plantel-grupo" data-grupo={g.posicion} aria-labelledby={`g-${g.posicion}`}>
+            <h2 class="seccion-titulo" id={`g-${g.posicion}`}>{g.titulo}</h2>
+            <ul class="plantel-grilla">
+              {g.jugadores.map((j) => <li><CardPersona persona={j} categoria={categoria.nombre} /></li>)}
+            </ul>
+          </section>
+        ))}
+
+        <section class="seccion" aria-labelledby="g-tecnico">
+          <h2 class="seccion-titulo" id="g-tecnico">Cuerpo técnico</h2>
+          {plantel.tecnicos.length ? (
+            <ul class="plantel-grilla">
+              {plantel.tecnicos.map((t) => <li><CardPersona persona={t} categoria={categoria.nombre} tecnico /></li>)}
+            </ul>
+          ) : (
+            <EstadoVacio titulo="Todavía no cargamos al cuerpo técnico de esta categoría." />
+          )}
+        </section>
+      </>
+    )}
+  </div>
+</Base>
+
+<script>
+  // Filtro por posición: mejora progresiva. Sin JavaScript se ven todas las posiciones.
+  const filtro = document.querySelector<HTMLElement>('[data-filtro]');
+  if (filtro) {
+    filtro.hidden = false;
+    const chips = [...filtro.querySelectorAll<HTMLButtonElement>('button[data-valor]')];
+    const grupos = [...document.querySelectorAll<HTMLElement>('[data-grupo]')];
+    const estado = filtro.querySelector<HTMLElement>('[data-filtro-estado]');
+    chips.forEach((chip) =>
+      chip.addEventListener('click', () => {
+        const valor = chip.dataset.valor;
+        chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+        grupos.forEach((g) => (g.hidden = valor !== 'todas' && g.dataset.grupo !== valor));
+        if (estado) estado.textContent = valor === 'todas' ? 'Mostrando todas las posiciones' : `Mostrando ${chip.textContent?.toLowerCase()}`;
+      }),
+    );
+  }
+</script>

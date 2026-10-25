@@ -1,16 +1,100 @@
 ---
-/** Inicio provisorio: se reemplaza por la Home completa en su propia sección. */
 import Base from '../layouts/Base.astro';
-import { obtenerConfiguracion } from '../lib/cms';
-import { seccionesVisibles } from '../lib/navegacion';
+import Hero from '../components/home/Hero.astro';
+import ProximosPartidos from '../components/home/ProximosPartidos.astro';
+import FranjaPruebas from '../components/home/FranjaPruebas.astro';
+import TablaResumen from '../components/home/TablaResumen.astro';
+import CardResultado from '../components/fixture/CardResultado.astro';
+import CardNoticia from '../components/noticias/CardNoticia.astro';
+import BannerSponsor from '../components/sponsors/BannerSponsor.astro';
+import EstadoVacio from '../components/EstadoVacio.astro';
+import { obtenerConfiguracion, obtenerConvocatorias, obtenerFixture, obtenerInicio, obtenerNoticias, obtenerSponsors } from '../lib/cms';
+import { equipoPropio, proximoPartido, resultadosPropios, tablaDeCategoria } from '../lib/fixture';
+import { ultimasNoticias } from '../lib/noticias';
+import { tituloHero } from '../lib/home';
 
-const config = await obtenerConfiguracion();
+const [categorias, noticias, sponsors, convocatorias, config, inicio] = await Promise.all([
+  obtenerFixture(),
+  obtenerNoticias(),
+  obtenerSponsors(),
+  obtenerConvocatorias(),
+  obtenerConfiguracion(),
+  obtenerInicio(),
+]);
+
+// Próximo partido de cada categoría, con Primera primero.
+const proximos = categorias
+  .map((c) => {
+    const propio = equipoPropio(c);
+    const partidos = (c.torneo?.partidos ?? []).filter((p) => p.local && p.visitante);
+    const vista = propio ? proximoPartido(partidos, propio._id) : null;
+    return vista && propio ? { slug: c.slug, nombre: c.nombre, vista, propio } : null;
+  })
+  .filter((x): x is NonNullable<typeof x> => x !== null);
+
+const primera = categorias.find((c) => c.slug === 'primera') ?? categorias[0];
+const propioPrimera = primera ? equipoPropio(primera) : null;
+const proximoPrimera = proximos.find((p) => p.slug === primera?.slug)?.vista ?? null;
+const ultimo = primera && propioPrimera ? resultadosPropios((primera.torneo?.partidos ?? []).filter((p) => p.local && p.visitante), propioPrimera._id)[0] : undefined;
+const tabla = primera ? tablaDeCategoria(primera) : null;
+const hayTabla = !!tabla && tabla.filas.some((f) => f.pj > 0);
+const tresNoticias = ultimasNoticias(noticias, 3);
+const sponsorsHome = sponsors.filter((s) => s.nivel !== 'colaborador').slice(0, 8);
+const titulo = tituloHero(proximoPrimera);
+const nombre = config.nombreClub || 'Club Atlético Boca Juniors de Serodino';
 ---
-<Base titulo="Boca de Serodino">
+<Base titulo="Boca de Serodino" descripcion={config.descripcionSitio || `Sitio oficial del ${nombre}: próximo partido, resultados, tabla, noticias y pruebas.`} imagen={inicio.imagenHero}>
+  <Hero imagen={inicio.imagenHero} titulo={titulo} bajada={inicio.bajada} />
+
+  <div class="contenedor home-tablero">
+    <ProximosPartidos items={proximos} />
+  </div>
+
+  <FranjaPruebas convocatorias={convocatorias} whatsapp={config.whatsapp} />
+
   <div class="contenedor">
-    <h1 class="pagina-titulo">{config.nombreClub || 'Club Atlético Boca Juniors de Serodino'}</h1>
-    <ul style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:var(--space-3)">
-      {seccionesVisibles().map((s) => <li><a class="bjs-btn bjs-btn--secundario" href={s.href}>{s.titulo}</a></li>)}
-    </ul>
+    {primera && (
+      <section class="seccion home-resultado" aria-labelledby="t-resultado">
+        <h2 class="seccion-titulo" id="t-resultado">Cómo vamos</h2>
+        <div class="home-resultado__grilla">
+          {ultimo && propioPrimera ? (
+            <CardResultado vista={ultimo} propio={propioPrimera} esMenores={!!primera.esMenores} />
+          ) : (
+            <EstadoVacio titulo="Todavía no hay resultados de este torneo." />
+          )}
+          {hayTabla && tabla ? (
+            <TablaResumen filas={tabla.filas} titulo={`${primera.nombre}${primera.torneo ? `, ${primera.torneo.nombre}` : ''}`} href={`/fixture/${primera.slug}#tabla`} />
+          ) : (
+            <EstadoVacio titulo="La tabla aparece después de la primera fecha." accion={{ texto: 'Ver el fixture', href: `/fixture/${primera.slug}` }} />
+          )}
+        </div>
+      </section>
+    )}
+
+    <section class="seccion" aria-labelledby="t-noticias">
+      <div class="home-cabecera">
+        <h2 class="seccion-titulo" id="t-noticias">Noticias</h2>
+        {tresNoticias.length > 0 && <a class="bjs-link" href="/noticias">Ver todas</a>}
+      </div>
+      {tresNoticias.length ? (
+        <ul class="noticias-grilla">{tresNoticias.map((n) => <li><CardNoticia noticia={n} /></li>)}</ul>
+      ) : (
+        <EstadoVacio titulo="Todavía no hay noticias." accion={config.instagram ? { texto: 'Ver Instagram del club', href: config.instagram } : undefined}>
+          Mientras tanto, las novedades están en Instagram.
+        </EstadoVacio>
+      )}
+    </section>
+
+    <section class="seccion" aria-labelledby="t-sponsors">
+      <div class="home-cabecera">
+        <h2 class="seccion-titulo" id="t-sponsors">Nos acompañan</h2>
+        <a class="bjs-link" href="/sponsors#sumate">Quiero ser sponsor</a>
+      </div>
+      {sponsorsHome.length ? (
+        <ul class="sponsors">{sponsorsHome.map((s) => <li><BannerSponsor sponsor={s} /></li>)}</ul>
+      ) : (
+        <EstadoVacio titulo="¿Tu comercio quiere acompañar al club?" accion={{ texto: 'Quiero ser sponsor', href: '/sponsors#sumate' }} />
+      )}
+    </section>
   </div>
 </Base>
