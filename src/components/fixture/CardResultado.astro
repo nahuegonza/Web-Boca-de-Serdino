@@ -1,0 +1,50 @@
+---
+/** Resultado de un partido nuestro, con goleadores opcionales. Nuestro equipo siempre arriba. */
+import type { VistaPartido } from '../../lib/fixture';
+import type { Equipo } from '../../lib/cms';
+import { diaLargo } from '../../lib/fechas';
+import { nombrePublico } from '../../lib/nombres';
+import Escudo from '../Escudo.astro';
+
+interface Props { vista: VistaPartido; propio: Equipo; esMenores: boolean }
+const { vista, propio, esMenores } = Astro.props;
+const p = vista.partido;
+const r = vista.resultado!;
+const nombre = (e: Equipo | null) => e?.nombreCorto || e?.nombre || 'Rival';
+const etiqueta = { gano: 'Ganó', empato: 'Empató', perdio: 'Perdió' }[r];
+const letra = { gano: 'G', empato: 'E', perdio: 'P' }[r];
+// Goles a favor de cada lado: un gol en contra cuenta para el otro equipo.
+const goles = (p.goleadores ?? []).filter((g) => g?.nombre);
+const ladoPropio = vista.condicion;
+const golesPropios = goles.filter((g) => (g.enContra ? g.equipo !== ladoPropio : g.equipo === ladoPropio));
+const golesRival = goles.filter((g) => (g.enContra ? g.equipo === ladoPropio : g.equipo !== ladoPropio));
+const texto = (g: (typeof goles)[number]) =>
+  `${nombrePublico(g.nombre, g.apellido, esMenores)}${g.minuto ? ` ${g.minuto}'` : ''}${g.enContra ? ' (en contra)' : ''}`;
+---
+<article class="bjs-resultado">
+  <div class="bjs-resultado__top">
+    <span>Fecha {p.fecha}, {vista.condicion === 'local' ? 'local' : 'visitante'}</span>
+    <span class={`bjs-estado bjs-estado--${r}`}><span aria-hidden="true">{letra}</span> {etiqueta}</span>
+  </div>
+  <div class="bjs-resultado__marcador">
+    <Escudo equipo={propio} tamano={28} />
+    <span class="bjs-resultado__eq">{nombre(propio)}</span>
+    <span class="bjs-resultado__gol">{vista.golesPropios}</span>
+    <Escudo equipo={vista.rival} tamano={28} />
+    <span class="bjs-resultado__eq bjs-resultado__eq--rival">{nombre(vista.rival)}</span>
+    <span class="bjs-resultado__gol bjs-resultado__gol--rival">{vista.golesRival}</span>
+  </div>
+  {golesPropios.length > 0 && (
+    <div>
+      <span class="bjs-sr">Goles de {nombre(propio)}:</span>
+      <ul class="goles">{golesPropios.map((g) => <li>{texto(g)}</li>)}</ul>
+    </div>
+  )}
+  {golesRival.length > 0 && (
+    <div>
+      <span class="bjs-sr">Goles de {nombre(vista.rival)}:</span>
+      <ul class="goles" style="opacity:1">{golesRival.map((g) => <li>{nombre(vista.rival)}: {texto(g)}</li>)}</ul>
+    </div>
+  )}
+  <span class="bjs-resultado__meta">{diaLargo(p.diaHora)}{p.cancha ? `, en ${p.cancha}` : ''}</span>
+</article>

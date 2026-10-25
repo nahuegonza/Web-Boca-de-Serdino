@@ -1,0 +1,10 @@
+---
+/** Escudo provisorio (original, sin elementos del CABJ) hasta cargar el escudo real en el CMS. */
+interface Props { ancho?: number; class?: string }
+const { ancho = 36, class: clase } = Astro.props;
+const alto = Math.round((ancho * 64) / 56);
+---
+<svg class={clase} width={ancho} height={alto} viewBox="0 0 56 64" aria-hidden="true" focusable="false">
+  <path d="M4 4h48v26c0 16-11 25-24 30C15 55 4 46 4 30z" fill="var(--azul-900)" stroke="var(--oro-400)" stroke-width="3"></path>
+  <rect x="5.5" y="24" width="45" height="12" fill="var(--oro-400)"></rect>
+</svg>

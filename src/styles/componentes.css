@@ -1,0 +1,173 @@
+/* Boca de Serodino: componentes. Todos los valores vienen de tokens.css. */
+
+
+.bjs-disp { font-family: var(--font-display); }
+.bjs-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.bjs-demo { padding: var(--space-6); display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.bjs-demo-label { display: block; font-size: 14px; line-height: 20px; color: var(--texto-suave); margin-bottom: var(--space-2); }
+
+/* Foco: siempre visible y sólido */
+.bjs-focus:focus-visible,
+.bjs-btn:focus-visible,
+.bjs-input:focus-visible,
+.bjs-link:focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
+.bjs-sobre-azul .bjs-btn:focus-visible,
+.bjs-sobre-azul .bjs-link:focus-visible,
+.bjs-sobre-azul .bjs-focus:focus-visible { outline-color: var(--foco-oscuro); }
+
+/* Links */
+.bjs-link { color: var(--primario); font-weight: 700; text-underline-offset: 4px; border-radius: var(--radius-sm); }
+.bjs-link:hover { color: var(--azul-600); text-decoration-thickness: 2px; }
+.bjs-sobre-azul .bjs-link { color: var(--blanco); }
+.bjs-sobre-azul .bjs-link:hover { color: var(--oro-300); }
+
+/* Estados de resultado */
+.bjs-estado { display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px; border-radius: var(--radius-pill); font-weight: 700; font-size: 14px; line-height: 20px; color: var(--blanco); }
+.bjs-estado--gano { background: var(--gano); }
+.bjs-estado--empato { background: var(--empato); }
+.bjs-estado--perdio { background: var(--perdio); }
+.bjs-estado--alerta { background: var(--alerta); }
+.bjs-estado--info { background: var(--info); }
+.bjs-cat { display: inline-flex; padding: 2px 10px; border-radius: var(--radius-pill); border: 1px solid var(--borde-control); font-size: 14px; line-height: 20px; color: var(--texto); }
+.bjs-sobre-azul .bjs-cat { border-color: var(--azul-300); color: var(--blanco); }
+
+/* Esqueletos de carga */
+.bjs-esq { background: var(--esqueleto); border-radius: var(--radius-sm); animation: bjs-pulso 1.4s ease-in-out infinite; }
+.bjs-sobre-azul .bjs-esq { background: var(--azul-800); }
+@keyframes bjs-pulso { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+@media (prefers-reduced-motion: reduce) { .bjs-esq, .bjs-spin { animation: none; } }
+
+/* Mensajes sin datos y error */
+.bjs-vacio, .bjs-error { border-radius: var(--radius-card); padding: var(--space-5) var(--space-6); display: flex; flex-direction: column; gap: var(--space-2); font-size: 16px; line-height: 24px; }
+.bjs-vacio { background: var(--superficie); border: 1px dashed var(--borde-control); color: var(--texto-suave); }
+.bjs-vacio strong { color: var(--texto); }
+.bjs-error { background: var(--perdio-50); border: 1px solid var(--perdio); color: var(--texto); }
+.bjs-error strong { color: var(--perdio); }
+
+/* Botones */
+.bjs-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: var(--space-12); padding: 0 var(--space-6); border: 2px solid transparent; border-radius: var(--radius-boton); font-family: var(--font-body); font-size: 17px; line-height: 22px; font-weight: 700; text-decoration: none; cursor: pointer; transition: background-color 150ms ease, border-color 150ms ease; }
+.bjs-btn--primario { background: var(--acento); color: var(--azul-900); }
+.bjs-btn--primario:hover { background: var(--oro-300); }
+.bjs-btn--primario:active { background: var(--oro-500); }
+.bjs-btn--secundario { background: transparent; color: var(--primario); border-color: var(--primario); }
+.bjs-btn--secundario:hover { background: var(--azul-50); border-color: var(--azul-600); color: var(--azul-600); }
+.bjs-sobre-azul .bjs-btn--secundario { color: var(--blanco); border-color: var(--blanco); }
+.bjs-sobre-azul .bjs-btn--secundario:hover { background: var(--azul-800); color: var(--blanco); border-color: var(--blanco); }
+.bjs-btn[disabled], .bjs-btn[aria-disabled="true"] { background: var(--linea); color: var(--texto-suave); border-color: transparent; cursor: not-allowed; }
+.bjs-btn[aria-busy="true"] { cursor: progress; }
+.bjs-spin { width: 18px; height: 18px; border: 2.5px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: bjs-giro 0.8s linear infinite; }
+@keyframes bjs-giro { to { transform: rotate(360deg); } }
+
+/* Campos del formulario */
+.bjs-campo { display: flex; flex-direction: column; gap: 6px; max-width: 360px; }
+.bjs-label { font-size: 15px; line-height: 20px; font-weight: 700; color: var(--texto); }
+.bjs-ayuda { font-size: 14px; line-height: 20px; color: var(--texto-suave); }
+.bjs-input { box-sizing: border-box; width: 100%; min-height: var(--space-12); padding: 0 14px; border: 1.5px solid var(--borde-control); border-radius: var(--radius-boton); background: var(--superficie); color: var(--texto); font-family: var(--font-body); font-size: 17px; line-height: 22px; }
+.bjs-input::placeholder { color: var(--texto-suave); }
+.bjs-input:hover { border-color: var(--primario); }
+.bjs-input:focus-visible { border-color: var(--primario); outline-offset: 2px; }
+.bjs-input[aria-invalid="true"] { border-color: var(--perdio); border-width: 2px; }
+.bjs-input:disabled { background: var(--fondo); color: var(--texto-suave); border-style: dashed; cursor: not-allowed; }
+select.bjs-input { appearance: none; padding-right: 44px; background-image: linear-gradient(45deg, transparent 50%, var(--texto) 50%), linear-gradient(135deg, var(--texto) 50%, transparent 50%); background-position: calc(100% - 22px) 50%, calc(100% - 16px) 50%; background-size: 6px 6px; background-repeat: no-repeat; }
+.bjs-msj-error { display: flex; gap: 6px; align-items: flex-start; font-size: 14px; line-height: 20px; font-weight: 700; color: var(--perdio); }
+
+/* Selector de categoría */
+.bjs-selector { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+.bjs-selector legend { padding: 0; margin-bottom: var(--space-3); font-size: 15px; line-height: 20px; font-weight: 700; }
+.bjs-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.bjs-chip { position: relative; }
+.bjs-chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.bjs-chip span { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 var(--space-4); border: 1.5px solid var(--borde-control); border-radius: var(--radius-pill); background: var(--superficie); color: var(--texto); font-size: 16px; font-weight: 700; cursor: pointer; }
+.bjs-chip span small { font-weight: 400; color: var(--texto-suave); font-size: 14px; }
+.bjs-chip span svg { display: none; }
+.bjs-chip:hover span { border-color: var(--primario); background: var(--azul-50); }
+.bjs-chip input:focus-visible + span { outline: 3px solid var(--foco); outline-offset: 3px; }
+.bjs-chip input:checked + span { background: var(--primario); border-color: var(--primario); color: var(--blanco); }
+.bjs-chip input:checked + span small { color: var(--azul-100); }
+.bjs-chip input:checked + span svg { display: block; }
+.bjs-chip input:disabled + span { background: var(--fondo); color: var(--texto-suave); border-style: dashed; cursor: not-allowed; }
+.bjs-selector[aria-invalid="true"] .bjs-chip span { border-color: var(--perdio); }
+
+/* Card de partido: tablero (próximo) */
+.bjs-tablero { background: var(--azul-900); color: var(--blanco); border-radius: var(--radius-tablero); overflow: hidden; width: 100%; max-width: 560px; box-shadow: var(--sombra-ninguna); }
+.bjs-tablero__top { display: flex; justify-content: space-between; gap: var(--space-4); padding: var(--space-5) var(--space-6) var(--space-3); font-size: 15px; line-height: 20px; color: var(--linea); }
+.bjs-tablero__equipos { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: var(--space-4); align-items: end; padding: 0 var(--space-6) var(--space-5); }
+.bjs-tablero__eq { display: flex; flex-direction: column; gap: var(--space-2); }
+.bjs-tablero__eq--visita { align-items: flex-end; text-align: right; }
+.bjs-tablero__nombre { font-family: var(--font-display); font-size: 48px; line-height: 0.88; font-weight: 900; text-transform: uppercase; overflow-wrap: anywhere; }
+.bjs-tablero__vs { font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--acento); padding-bottom: 4px; }
+.bjs-tablero__franja { background: var(--acento); color: var(--azul-900); padding: var(--space-3) var(--space-6); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-6); font-family: var(--font-display); font-size: 34px; line-height: 1; font-weight: 900; text-transform: uppercase; }
+.bjs-tablero__pie { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3) var(--space-6); padding: var(--space-4) var(--space-6) var(--space-5); font-size: 16px; }
+.bjs-tablero__cancha { display: flex; gap: var(--space-2); align-items: center; }
+.bjs-tablero--suspendido .bjs-tablero__franja { background: var(--alerta); color: var(--blanco); }
+.bjs-tablero--suspendido .bjs-tablero__franja s { text-decoration-thickness: 3px; }
+.bjs-escudo-vacio { width: 44px; height: 51px; box-sizing: border-box; border: 2px dashed var(--azul-300); border-radius: var(--radius-sm); }
+
+/* Card de partido: jugado */
+.bjs-resultado { box-sizing: border-box; width: 100%; max-width: 360px; background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radius-card); padding: var(--space-5) var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); position: relative; transition: border-color 150ms ease; }
+.bjs-resultado:hover { border-color: var(--primario); }
+.bjs-resultado:focus-within { outline: 3px solid var(--foco); outline-offset: 3px; }
+.bjs-resultado__top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); font-size: 14px; color: var(--texto-suave); }
+.bjs-resultado__marcador { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: var(--space-3); row-gap: var(--space-1); align-items: center; }
+.bjs-resultado__eq { font-family: var(--font-display); font-size: 30px; font-weight: 800; line-height: 1.05; text-transform: uppercase; }
+.bjs-resultado__gol { font-family: var(--font-display); font-size: 44px; font-weight: 900; line-height: 1; text-align: right; color: var(--primario); }
+.bjs-resultado__eq--rival, .bjs-resultado__gol--rival { color: var(--texto-suave); }
+.bjs-resultado__meta { font-size: 14px; line-height: 20px; color: var(--texto-suave); }
+.bjs-resultado a.bjs-estirar::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-card); }
+.bjs-resultado a.bjs-estirar:focus-visible { outline: none; }
+
+/* Tabla de posiciones */
+.bjs-tabla-wrap { background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radius-card); overflow-x: auto; width: 100%; max-width: 520px; }
+.bjs-tabla { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 22px; font-variant-numeric: tabular-nums; }
+.bjs-tabla caption { text-align: left; padding: var(--space-3) var(--space-4) var(--space-1); font-size: 14px; color: var(--texto-suave); }
+.bjs-tabla th { font-weight: 400; font-size: 14px; color: var(--texto-suave); padding: var(--space-2) var(--space-2); text-align: right; }
+.bjs-tabla td { padding: var(--space-3) var(--space-2); text-align: right; border-top: 1px solid var(--linea); }
+.bjs-tabla th:first-child, .bjs-tabla td:first-child { text-align: left; padding-left: var(--space-4); width: 40px; }
+.bjs-tabla th:nth-child(2), .bjs-tabla td:nth-child(2) { text-align: left; }
+.bjs-tabla th:last-child, .bjs-tabla td:last-child { padding-right: var(--space-4); font-weight: 700; }
+.bjs-tabla tbody tr:hover td { background: var(--azul-50); }
+.bjs-fila--nuestra td { background: var(--acento); color: var(--azul-900); font-weight: 700; }
+.bjs-tabla tbody tr.bjs-fila--nuestra:hover td { background: var(--oro-300); }
+.bjs-fila__eq { display: inline-flex; align-items: center; gap: var(--space-2); }
+.bjs-tabla__pie { margin: 0; padding: var(--space-2) var(--space-4) var(--space-3); border-top: 1px solid var(--linea); font-size: 14px; color: var(--texto-suave); }
+
+/* Card de jugador */
+.bjs-jugador { box-sizing: border-box; width: 200px; background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radius-card); overflow: hidden; position: relative; transition: border-color 150ms ease; }
+.bjs-jugador:hover { border-color: var(--primario); }
+.bjs-jugador:focus-within { outline: 3px solid var(--foco); outline-offset: 3px; }
+.bjs-jugador__foto { position: relative; aspect-ratio: 4 / 5; background: repeating-linear-gradient(90deg, #3E6B47 0 24px, #477A51 24px 48px); }
+.bjs-jugador__foto--vacia { background: var(--azul-100); display: flex; align-items: center; justify-content: center; }
+.bjs-jugador__dorsal { position: absolute; left: 0; bottom: 0; min-width: 64px; padding: var(--space-1) var(--space-3); background: var(--azul-900); color: var(--acento); font-family: var(--font-display); font-size: 44px; line-height: 1; font-weight: 900; text-align: center; }
+.bjs-jugador__info { padding: var(--space-3) var(--space-4) var(--space-4); display: flex; flex-direction: column; gap: var(--space-1); }
+.bjs-jugador__nombre { margin: 0; font-size: 18px; line-height: 24px; font-weight: 700; }
+.bjs-jugador__nombre a { color: var(--texto); text-decoration: none; }
+.bjs-jugador__nombre a::after { content: ""; position: absolute; inset: 0; }
+.bjs-jugador__nombre a:focus-visible { outline: none; }
+.bjs-jugador__pos { font-size: 15px; line-height: 20px; color: var(--texto-suave); }
+.bjs-jugador .bjs-cat { align-self: flex-start; margin-top: var(--space-1); }
+
+/* Card de noticia */
+.bjs-noticia { box-sizing: border-box; width: 100%; max-width: 340px; background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radius-card); overflow: hidden; position: relative; }
+.bjs-noticia:focus-within { outline: 3px solid var(--foco); outline-offset: 3px; }
+.bjs-noticia__img { aspect-ratio: 16 / 10; background: repeating-linear-gradient(90deg, #3E6B47 0 32px, #477A51 32px 64px); }
+.bjs-noticia__img--rota { background: var(--azul-100); display: flex; align-items: center; justify-content: center; }
+.bjs-noticia__cuerpo { padding: var(--space-4) var(--space-5) var(--space-5); display: flex; flex-direction: column; gap: var(--space-2); }
+.bjs-noticia__fecha { font-size: 14px; line-height: 20px; color: var(--texto-suave); }
+.bjs-noticia__titulo { margin: 0; font-size: 21px; line-height: 27px; font-weight: 700; }
+.bjs-noticia__titulo a { color: var(--texto); text-decoration: none; }
+.bjs-noticia__titulo a::after { content: ""; position: absolute; inset: 0; }
+.bjs-noticia__titulo a:focus-visible { outline: none; }
+.bjs-noticia:hover .bjs-noticia__titulo a { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; color: var(--primario); }
+.bjs-noticia__resumen { margin: 0; font-size: 16px; line-height: 24px; color: var(--texto-suave); }
+
+/* Banner de sponsor */
+.bjs-sponsor { box-sizing: border-box; display: flex; align-items: center; gap: var(--space-4); background: var(--superficie); border: 1px solid var(--linea); border-radius: var(--radius-card); padding: var(--space-4) var(--space-5); color: var(--texto); text-decoration: none; transition: border-color 150ms ease; }
+.bjs-sponsor:hover { border-color: var(--primario); }
+.bjs-sponsor--principal { width: 100%; max-width: 560px; min-height: 112px; }
+.bjs-sponsor--oficial { width: 180px; height: 96px; justify-content: center; }
+.bjs-sponsor__logo { flex: 0 0 auto; width: 120px; height: 64px; border-radius: var(--radius-sm); background: var(--fondo); border: 1px dashed var(--borde-control); display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--texto-suave); }
+.bjs-sponsor__texto { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.bjs-sponsor__nivel { font-size: 14px; line-height: 20px; color: var(--oro-700); font-weight: 700; }
+.bjs-sponsor__nombre { font-size: 19px; line-height: 24px; font-weight: 700; }
+.bjs-sponsor__accion { margin-left: auto; font-weight: 700; color: var(--primario); text-decoration: underline; text-underline-offset: 4px; white-space: nowrap; }
+.bjs-sponsor__sinlogo { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--primario); text-align: center; line-height: 1; }

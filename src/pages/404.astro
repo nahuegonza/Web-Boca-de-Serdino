@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import EstadoError from '../components/EstadoError.astro';
+---
+<Base titulo="Página no encontrada" noIndexar>
+  <div class="contenedor">
+    <h1 class="pagina-titulo">No encontramos esta página</h1>
+    <EstadoError titulo="La dirección no existe o cambió." accion={{ texto: 'Ver el fixture', href: '/fixture' }}>
+      Revisá que esté bien escrita o empezá de nuevo desde el fixture.
+    </EstadoError>
+  </div>
+</Base>

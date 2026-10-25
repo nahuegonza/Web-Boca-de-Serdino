@@ -1,0 +1,61 @@
+---
+/** Tabla de posiciones completa, calculada de los resultados. Nuestra fila en oro. */
+import type { ResultadoTabla } from '../../lib/tabla';
+import type { Ajuste } from '../../lib/cms';
+import EscudoProvisorio from '../EscudoProvisorio.astro';
+
+interface Props { tabla: ResultadoTabla; titulo: string; ajustes?: Ajuste[] | null; ultimaFechaJugada?: number | null }
+const { tabla, titulo, ajustes, ultimaFechaJugada } = Astro.props;
+const conAjustes = (ajustes ?? []).filter((a) => a && Number.isInteger(a.puntos) && a.puntos !== 0);
+const hayEmpateTotal = tabla.filas.some((f) => f.empateSinDesempate && f.pj > 0);
+const signo = (n: number) => (n > 0 ? `+${n}` : `${n}`);
+---
+<div class="bjs-tabla-wrap tabla-completa" tabindex="0" role="region" aria-labelledby="tabla-caption">
+  <table class="bjs-tabla">
+    <caption id="tabla-caption">{titulo}{ultimaFechaJugada ? `, después de la fecha ${ultimaFechaJugada}` : ''}</caption>
+    <thead>
+      <tr>
+        <th scope="col"><abbr title="Posición">Pos</abbr></th>
+        <th scope="col">Equipo</th>
+        <th scope="col"><abbr title="Puntos">Pts</abbr></th>
+        <th scope="col"><abbr title="Partidos jugados">PJ</abbr></th>
+        <th scope="col"><abbr title="Partidos ganados">PG</abbr></th>
+        <th scope="col"><abbr title="Partidos empatados">PE</abbr></th>
+        <th scope="col"><abbr title="Partidos perdidos">PP</abbr></th>
+        <th scope="col"><abbr title="Goles a favor">GF</abbr></th>
+        <th scope="col"><abbr title="Goles en contra">GC</abbr></th>
+        <th scope="col"><abbr title="Diferencia de gol">DG</abbr></th>
+      </tr>
+    </thead>
+    <tbody>
+      {tabla.filas.map((f) => (
+        <tr class:list={{ 'bjs-fila--nuestra': f.equipo.esPropio }}>
+          <td>{f.posicion}</td>
+          <th scope="row" style="font-weight:inherit;text-align:left">
+            <span class="bjs-fila__eq">
+              {f.equipo.esPropio && <EscudoProvisorio ancho={16} />}
+              {f.equipo.nombre}
+              {f.ajuste !== 0 && <span aria-hidden="true">*</span>}
+            </span>
+          </th>
+          <td style="font-weight:700">{f.pts}</td>
+          <td>{f.pj}</td>
+          <td>{f.pg}</td>
+          <td>{f.pe}</td>
+          <td>{f.pp}</td>
+          <td>{f.gf}</td>
+          <td>{f.gc}</td>
+          <td>{signo(f.dg)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  {(conAjustes.length > 0 || hayEmpateTotal) && (
+    <ul class="tabla-notas">
+      {conAjustes.map((a) => (
+        <li>* {a.equipoNombre ?? 'Equipo'}: {signo(a.puntos)} pts{a.motivo ? `. ${a.motivo}` : ''}.</li>
+      ))}
+      {hayEmpateTotal && <li>Hay equipos igualados en todos los criterios de desempate; se ordenan alfabéticamente.</li>}
+    </ul>
+  )}
+</div>

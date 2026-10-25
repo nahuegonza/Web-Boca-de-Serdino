@@ -1,0 +1,123 @@
+/* Fuentes autoalojadas: sin pedidos a Google Fonts, mejor LCP y privacidad. */
+@import "@fontsource/big-shoulders-display/latin-800";
+@import "@fontsource/big-shoulders-display/latin-900";
+@import "@fontsource/atkinson-hyperlegible/latin-400";
+@import "@fontsource/atkinson-hyperlegible/latin-700";
+
+@import "tailwindcss";
+@import "./tokens.css";
+@import "./componentes.css";
+@import "./secciones.css";
+
+/* Tailwind lee las variables del sistema de diseño: un solo origen de valores. */
+@theme inline {
+  --color-azul-50: var(--azul-50);
+  --color-azul-100: var(--azul-100);
+  --color-azul-200: var(--azul-200);
+  --color-azul-300: var(--azul-300);
+  --color-azul-400: var(--azul-400);
+  --color-azul-500: var(--azul-500);
+  --color-azul-600: var(--azul-600);
+  --color-azul-700: var(--azul-700);
+  --color-azul-800: var(--azul-800);
+  --color-azul-900: var(--azul-900);
+  --color-azul-950: var(--azul-950);
+  --color-oro-50: var(--oro-50);
+  --color-oro-100: var(--oro-100);
+  --color-oro-200: var(--oro-200);
+  --color-oro-300: var(--oro-300);
+  --color-oro-400: var(--oro-400);
+  --color-oro-500: var(--oro-500);
+  --color-oro-600: var(--oro-600);
+  --color-oro-700: var(--oro-700);
+  --color-oro-800: var(--oro-800);
+  --color-oro-900: var(--oro-900);
+  --color-fondo: var(--fondo);
+  --color-superficie: var(--superficie);
+  --color-linea: var(--linea);
+  --color-borde-control: var(--borde-control);
+  --color-esqueleto: var(--esqueleto);
+  --color-texto: var(--texto);
+  --color-texto-suave: var(--texto-suave);
+  --color-primario: var(--primario);
+  --color-acento: var(--acento);
+  --color-foco: var(--foco);
+  --color-foco-oscuro: var(--foco-oscuro);
+  --color-gano: var(--gano);
+  --color-gano-50: var(--gano-50);
+  --color-empato: var(--empato);
+  --color-empato-50: var(--empato-50);
+  --color-perdio: var(--perdio);
+  --color-perdio-50: var(--perdio-50);
+  --color-alerta: var(--alerta);
+  --color-alerta-50: var(--alerta-50);
+  --color-info: var(--info);
+  --color-info-50: var(--info-50);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --radius-tablero: var(--radius-tablero);
+  --radius-sm: var(--radius-sm);
+  --radius-boton: var(--radius-boton);
+  --radius-card: var(--radius-card);
+  --radius-pill: var(--radius-pill);
+  --shadow-flotante: var(--sombra-flotante);
+}
+
+/* Los breakpoints no pueden leer variables: van con su valor (tokens breakpoint-*). */
+@theme {
+  --breakpoint-sm: 30rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --container-contenido: 75rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: var(--space-4);
+    scroll-padding-bottom: var(--space-20);
+  }
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--texto);
+    background: var(--fondo);
+  }
+  @media (min-width: 64rem) {
+    body { font-size: 1.0625rem; }
+  }
+  a { color: var(--primario); }
+  :focus-visible { outline: 3px solid var(--foco); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  }
+}
+
+/* Contenedor de página: margen lateral del sistema y ancho máximo. */
+.contenedor {
+  width: 100%;
+  max-width: var(--contenido-max);
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+  box-sizing: border-box;
+}
+@media (min-width: 64rem) {
+  .contenedor { padding-inline: var(--space-8); }
+}
+
+/* Link para saltar al contenido */
+.saltar {
+  position: absolute;
+  left: var(--space-4);
+  top: -100px;
+  z-index: 50;
+  background: var(--acento);
+  color: var(--azul-900);
+  font-weight: 700;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-boton);
+}
+.saltar:focus { top: var(--space-3); }

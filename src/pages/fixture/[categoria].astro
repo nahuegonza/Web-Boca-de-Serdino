@@ -1,0 +1,121 @@
+---
+import Base from '../../layouts/Base.astro';
+import SelectorCategoria from '../../components/fixture/SelectorCategoria.astro';
+import Tablero from '../../components/fixture/Tablero.astro';
+import FechaFixture from '../../components/fixture/FechaFixture.astro';
+import CardResultado from '../../components/fixture/CardResultado.astro';
+import TablaPosiciones from '../../components/fixture/TablaPosiciones.astro';
+import EstadoVacio from '../../components/EstadoVacio.astro';
+import { obtenerFixture, type Categoria } from '../../lib/cms';
+import { agruparPorFecha, equipoPropio, proximoPartido, resultadosPropios, tablaDeCategoria } from '../../lib/fixture';
+import { isoValido } from '../../lib/fechas';
+
+export async function getStaticPaths() {
+  const categorias = await obtenerFixture();
+  return categorias.filter((c) => c.slug).map((c) => ({ params: { categoria: c.slug }, props: { categoria: c, todas: categorias } }));
+}
+
+interface Props { categoria: Categoria; todas: Categoria[] }
+const { categoria, todas } = Astro.props;
+const torneo = categoria.torneo;
+const partidos = (torneo?.partidos ?? []).filter((p) => p.local && p.visitante);
+const propio = equipoPropio(categoria);
+const proximo = propio ? proximoPartido(partidos, propio._id) : null;
+const fechas = agruparPorFecha(partidos, propio?._id ?? null);
+const resultados = propio ? resultadosPropios(partidos, propio._id) : [];
+const tabla = tablaDeCategoria(categoria);
+const hayJugados = partidos.some((p) => p.estado === 'jugado');
+const ultimaFechaJugada = hayJugados ? Math.max(...partidos.filter((p) => p.estado === 'jugado').map((p) => p.fecha)) : null;
+const fechaProxima = proximo?.partido.fecha ?? fechas.find((f) => f.nuestro?.partido.estado === 'programado')?.numero ?? null;
+
+const titulo = `Fixture y tabla de ${categoria.nombre}`;
+const descripcion = torneo
+  ? `Fixture por fecha, resultados y tabla de posiciones de ${categoria.nombre} de Boca de Serodino en el ${torneo.nombre} ${torneo.temporada}.`
+  : `Fixture, resultados y tabla de ${categoria.nombre} de Boca de Serodino.`;
+
+// Datos estructurados: próximos partidos nuestros como eventos deportivos.
+const eventos = propio
+  ? partidos
+      .filter((p) => p.estado === 'programado' && isoValido(p.diaHora) && (p.local!._id === propio._id || p.visitante!._id === propio._id))
+      .slice(0, 5)
+      .map((p) => ({
+        '@context': 'https://schema.org',
+        '@type': 'SportsEvent',
+        name: `${p.local!.nombre} vs ${p.visitante!.nombre} (${categoria.nombre})`,
+        startDate: isoValido(p.diaHora),
+        sport: 'Fútbol',
+        homeTeam: { '@type': 'SportsTeam', name: p.local!.nombre },
+        awayTeam: { '@type': 'SportsTeam', name: p.visitante!.nombre },
+        ...(p.cancha ? { location: { '@type': 'Place', name: p.cancha } } : {}),
+      }))
+  : [];
+---
+<Base titulo={titulo} descripcion={descripcion} jsonLd={eventos.length ? eventos : undefined}>
+  <div class="contenedor">
+    <h1 class="pagina-titulo">Fixture y tabla</h1>
+    <SelectorCategoria categorias={todas} actual={categoria.slug} />
+
+    {!torneo ? (
+      <div class="seccion">
+        <EstadoVacio titulo={`Todavía no hay un torneo en curso para ${categoria.nombre}.`} accion={{ texto: 'Ver todas las categorías', href: '/fixture' }}>
+          Cuando la liga confirme el calendario, el fixture aparece acá.
+        </EstadoVacio>
+      </div>
+    ) : (
+      <>
+        <p style="margin:var(--space-4) 0 0;color:var(--texto-suave)">{categoria.nombre}, {torneo.nombre} {torneo.temporada}</p>
+        <nav class="indice" aria-label="En esta página">
+          <a href="#tabla">Tabla</a>
+          <a href="#fixture">Fixture</a>
+          <a href="#resultados">Resultados</a>
+        </nav>
+
+        <section class="seccion" aria-label="Próximo partido">
+          {proximo && propio ? (
+            <Tablero vista={proximo} propio={propio} categoria={categoria.nombre} />
+          ) : (
+            <EstadoVacio titulo="No hay próximo partido cargado.">
+              {partidos.length ? 'El torneo no tiene más partidos programados para Boca.' : 'El fixture se publica cuando la liga confirma las fechas.'}
+            </EstadoVacio>
+          )}
+        </section>
+
+        <section class="seccion" id="tabla" aria-labelledby="t-tabla">
+          <h2 class="seccion-titulo" id="t-tabla">Tabla de posiciones</h2>
+          {tabla && hayJugados ? (
+            <TablaPosiciones tabla={tabla} titulo={`${categoria.nombre}, ${torneo.nombre}`} ajustes={torneo.ajustes} ultimaFechaJugada={ultimaFechaJugada} />
+          ) : (
+            <EstadoVacio titulo="La tabla aparece después de la primera fecha jugada.">
+              Se calcula sola con los resultados que carga el club.
+            </EstadoVacio>
+          )}
+        </section>
+
+        <section class="seccion" id="fixture" aria-labelledby="t-fixture">
+          <h2 class="seccion-titulo" id="t-fixture">Fixture</h2>
+          {fechas.length ? (
+            <>
+              {fechaProxima && <p style="margin:0 0 var(--space-3)"><a class="bjs-link" href={`#fecha-${fechaProxima}`}>Ir a la próxima fecha</a></p>}
+              <ol class="fixture">
+                {fechas.map((f) => <FechaFixture fecha={f} esProxima={f.numero === fechaProxima} />)}
+              </ol>
+            </>
+          ) : (
+            <EstadoVacio titulo="Todavía no hay fechas cargadas.">El fixture se publica cuando la liga confirma el calendario.</EstadoVacio>
+          )}
+        </section>
+
+        <section class="seccion" id="resultados" aria-labelledby="t-resultados">
+          <h2 class="seccion-titulo" id="t-resultados">Resultados</h2>
+          {resultados.length && propio ? (
+            <ul class="resultados">
+              {resultados.map((v) => <li><CardResultado vista={v} propio={propio} esMenores={!!categoria.esMenores} /></li>)}
+            </ul>
+          ) : (
+            <EstadoVacio titulo="Boca todavía no jugó en este torneo.">Los resultados aparecen acá después de cada partido.</EstadoVacio>
+          )}
+        </section>
+      </>
+    )}
+  </div>
+</Base>

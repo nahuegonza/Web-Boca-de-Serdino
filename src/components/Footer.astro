@@ -1,0 +1,32 @@
+---
+import type { Configuracion } from '../lib/cms';
+
+interface Props { config: Configuracion }
+const { config } = Astro.props;
+const nombre = config.nombreClub || 'Club Atlético Boca Juniors de Serodino';
+const whatsapp = config.whatsapp ? `https://wa.me/${config.whatsapp}` : null;
+---
+<footer class="sitio-footer">
+  <div class="contenedor sitio-footer__grilla">
+    <div>
+      <h2>{nombre}</h2>
+      {config.direccion && <p class="sitio-footer__texto-suave">{config.direccion}</p>}
+    </div>
+    {(whatsapp || config.email || config.instagram) && (
+      <div>
+        <h2>Contacto</h2>
+        <ul>
+          {whatsapp && <li><a href={whatsapp} rel="noopener">WhatsApp <span class="bjs-sr">(abre WhatsApp)</span></a></li>}
+          {config.email && <li><a href={`mailto:${config.email}`}>{config.email}</a></li>}
+          {config.instagram && <li><a href={config.instagram} rel="noopener">Instagram</a></li>}
+        </ul>
+      </div>
+    )}
+    {config.horariosSecretaria && (
+      <div>
+        <h2>Secretaría</h2>
+        <p class="sitio-footer__texto-suave">{config.horariosSecretaria}</p>
+      </div>
+    )}
+  </div>
+</footer>

@@ -1,0 +1,10 @@
+---
+/** Estado de error: qué pasó y cómo seguir. Sin disculpas, con una acción. */
+interface Props { titulo: string; accion?: { texto: string; href: string } }
+const { titulo, accion } = Astro.props;
+---
+<div class="bjs-error" role="alert">
+  <strong>{titulo}</strong>
+  <slot />
+  {accion && <div><a class="bjs-btn bjs-btn--secundario" href={accion.href}>{accion.texto}</a></div>}
+</div>

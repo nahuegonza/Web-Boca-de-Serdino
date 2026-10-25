@@ -1,0 +1,67 @@
+---
+import type { Configuracion } from '../lib/cms';
+import { seccionesVisibles } from '../lib/navegacion';
+import { Picture } from 'astro:assets';
+import EscudoProvisorio from './EscudoProvisorio.astro';
+
+interface Props { config: Configuracion }
+const { config } = Astro.props;
+const actual = Astro.url.pathname;
+const secciones = seccionesVisibles();
+const esActual = (href: string) => actual === href || actual.startsWith(`${href}/`);
+---
+<header class="sitio-header">
+  <div class="contenedor">
+    <div class="sitio-header__fila">
+      <a class="sitio-marca" href="/">
+        {config.escudo?.url ? (
+          <Picture src={config.escudo.url} width={36} height={Math.round((36 * config.escudo.alto) / config.escudo.ancho)} densities={[1, 2]} formats={['avif', 'webp']} alt="" loading="eager" />
+        ) : (
+          <EscudoProvisorio ancho={36} />
+        )}
+        <span class="sitio-marca__nombre">Boca<span>de Serodino</span></span>
+        <span class="bjs-sr">, ir al inicio</span>
+      </a>
+      {secciones.length > 0 && (
+        <button class="sitio-menu-btn" type="button" aria-expanded="false" aria-controls="menu-principal" data-menu-btn>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+          <span class="bjs-sr">Menú</span>
+        </button>
+      )}
+      <nav class="sitio-nav sitio-nav--escritorio" aria-label="Principal" id="menu-principal" data-abierto="false">
+        <ul>
+          {secciones.map((s) => (
+            <li><a href={s.href} aria-current={esActual(s.href) ? 'page' : undefined}>{s.titulo}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Menú mobile: abre y cierra, se cierra con Escape y devuelve el foco al botón.
+  const boton = document.querySelector<HTMLButtonElement>('[data-menu-btn]');
+  const menu = document.getElementById('menu-principal');
+  if (boton && menu) {
+    const fila = boton.closest('.sitio-header__fila');
+    const cambiar = (abrir: boolean) => {
+      boton.setAttribute('aria-expanded', String(abrir));
+      menu.dataset.abierto = String(abrir);
+      if (fila) (fila as HTMLElement).style.flexWrap = abrir ? 'wrap' : '';
+      if (abrir) menu.querySelector<HTMLAnchorElement>('a')?.focus();
+    };
+    boton.addEventListener('click', () => cambiar(boton.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && boton.getAttribute('aria-expanded') === 'true') {
+        cambiar(false);
+        boton.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  /* En mobile el menú abierto ocupa toda la fila debajo de la marca */
+  .sitio-nav--escritorio[data-abierto='true'] { flex-basis: 100%; }
+</style>

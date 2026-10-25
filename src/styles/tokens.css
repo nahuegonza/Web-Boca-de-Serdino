@@ -1,0 +1,90 @@
+/* Boca de Serodino — generated from tokens.json */
+:root, [data-theme="claro"] {
+  --azul-50: #eef3fc;
+  --azul-100: #d9e4f7;
+  --azul-200: #b3c8ee;
+  --azul-300: #7f9fdc;
+  --azul-400: #4c74c4;
+  --azul-500: #2550a3;
+  --azul-600: #163c8a;
+  --azul-700: #0b2e73;
+  --azul-800: #0a2560;
+  --azul-900: #071d4a;
+  --azul-950: #04122f;
+  --oro-50: #fff8e0;
+  --oro-100: #feedb3;
+  --oro-200: #fddd73;
+  --oro-300: #facc3a;
+  --oro-400: #f4b400;
+  --oro-500: #d99e00;
+  --oro-600: #b07f00;
+  --oro-700: #8a6500;
+  --oro-800: #6b4e00;
+  --oro-900: #4d3800;
+  --cal: #f4f6fa;
+  --blanco: #ffffff;
+  --linea: #d3dae6;
+  --esqueleto: #e3e8f0;
+  --borde-control: #6b7489;
+  --gris: #56607a;
+  --tinta: #121a2e;
+  --gano: #1b7a46;
+  --gano-50: #e7f4ec;
+  --empato: #5c6476;
+  --empato-50: #eef0f3;
+  --perdio: #b3261e;
+  --perdio-50: #fdecea;
+  --alerta: #9a5b00;
+  --alerta-50: #fff4e0;
+  --info: #1f5fcc;
+  --info-50: #eaf1fd;
+  --superficie: var(--blanco);
+  --fondo: var(--cal);
+  --texto: var(--tinta);
+  --texto-suave: var(--gris);
+  --primario: var(--azul-700);
+  --acento: var(--oro-400);
+  --foco: var(--azul-500);
+  --foco-oscuro: var(--oro-400);
+  --sombra-flotante: 0 8px 24px rgba(7, 29, 74, 0.22);
+  --sombra-ninguna: none;
+}
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --radius-tablero: 2px;
+  --radius-sm: 4px;
+  --radius-boton: 6px;
+  --radius-card: 8px;
+  --radius-pill: 999px;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --contenido-max: 1200px;
+  --font-display: "Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
+  --font-body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.tablero { font-family: var(--font-display); font-size: 64px; line-height: 0.86; font-weight: 900; }
+.tablero-movil { font-family: var(--font-display); font-size: 36px; line-height: 0.9; font-weight: 900; }
+.marcador { font-family: var(--font-display); font-size: 52px; line-height: 1; font-weight: 900; }
+.h1 { font-family: var(--font-display); font-size: 72px; line-height: 0.9; font-weight: 900; }
+.h1-movil { font-family: var(--font-display); font-size: 44px; line-height: 0.92; font-weight: 900; }
+.h2 { font-family: var(--font-display); font-size: 48px; line-height: 1; font-weight: 800; }
+.h2-movil { font-family: var(--font-display); font-size: 34px; line-height: 1; font-weight: 800; }
+.franja { font-family: var(--font-display); font-size: 34px; line-height: 1; font-weight: 900; }
+.h3 { font-family: var(--font-body); font-size: 21px; line-height: 27px; font-weight: 700; }
+.cuerpo { font-family: var(--font-body); font-size: 17px; line-height: 26px; font-weight: 400; }
+.cuerpo-movil { font-family: var(--font-body); font-size: 16px; line-height: 25px; font-weight: 400; }
+.etiqueta { font-family: var(--font-body); font-size: 15px; line-height: 20px; font-weight: 700; }
+.boton { font-family: var(--font-body); font-size: 17px; line-height: 22px; font-weight: 700; }
+.detalle { font-family: var(--font-body); font-size: 14px; line-height: 20px; font-weight: 400; }

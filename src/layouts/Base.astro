@@ -1,0 +1,40 @@
+---
+import '../styles/global.css';
+import Seo from '../components/Seo.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { obtenerConfiguracion, type ImagenCMS } from '../lib/cms';
+
+interface Props {
+  titulo: string;
+  descripcion?: string;
+  imagen?: ImagenCMS | null;
+  tipo?: 'website' | 'article';
+  noIndexar?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+const config = await obtenerConfiguracion();
+const nombreSitio = 'Boca de Serodino';
+const { titulo, descripcion, imagen, tipo, noIndexar, jsonLd } = Astro.props;
+const tituloCompleto = titulo === nombreSitio ? titulo : `${titulo} | ${nombreSitio}`;
+const desc = descripcion || config.descripcionSitio || 'Sitio oficial del Club Atlético Boca Juniors de Serodino.';
+---
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0B2E73" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <Seo titulo={tituloCompleto} descripcion={desc} imagen={imagen ?? config.imagenCompartir} tipo={tipo} noIndexar={noIndexar} jsonLd={jsonLd} nombreSitio={nombreSitio} />
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+    <Header config={config} />
+    <main id="contenido" tabindex="-1">
+      <slot />
+    </main>
+    <Footer config={config} />
+  </body>
+</html>

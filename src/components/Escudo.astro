@@ -1,0 +1,35 @@
+---
+/**
+ * Escudo de un equipo. Optimizado en el build (AVIF/WebP, 1x y 2x).
+ * Sin imagen: el escudo provisorio para nuestro equipo o un escudo vacío para el rival.
+ * Siempre decorativo: el nombre del equipo ya está en texto al lado.
+ */
+import { Picture } from 'astro:assets';
+import type { Equipo } from '../lib/cms';
+import EscudoProvisorio from './EscudoProvisorio.astro';
+
+interface Props { equipo: Equipo | null; tamano?: number; claro?: boolean }
+const { equipo, tamano = 40, claro = false } = Astro.props;
+const img = equipo?.escudo;
+const alto = img ? Math.round((tamano * img.alto) / img.ancho) : Math.round((tamano * 64) / 56);
+---
+{img?.url ? (
+  <Picture
+    src={img.url}
+    width={tamano}
+    height={alto}
+    densities={[1, 2]}
+    formats={['avif', 'webp']}
+    alt=""
+    loading="lazy"
+    decoding="async"
+    style={`width:${tamano}px;height:auto;flex-shrink:0`}
+  />
+) : equipo?.esPropio ? (
+  <EscudoProvisorio ancho={tamano} />
+) : (
+  <span
+    aria-hidden="true"
+    style={`display:inline-block;flex-shrink:0;box-sizing:border-box;width:${tamano}px;height:${alto}px;border:2px dashed ${claro ? 'var(--azul-300)' : 'var(--borde-control)'};border-radius:var(--radius-sm)`}
+  ></span>
+)}

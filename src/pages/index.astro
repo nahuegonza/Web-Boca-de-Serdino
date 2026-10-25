@@ -1,0 +1,16 @@
+---
+/** Inicio provisorio: se reemplaza por la Home completa en su propia sección. */
+import Base from '../layouts/Base.astro';
+import { obtenerConfiguracion } from '../lib/cms';
+import { seccionesVisibles } from '../lib/navegacion';
+
+const config = await obtenerConfiguracion();
+---
+<Base titulo="Boca de Serodino">
+  <div class="contenedor">
+    <h1 class="pagina-titulo">{config.nombreClub || 'Club Atlético Boca Juniors de Serodino'}</h1>
+    <ul style="list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:var(--space-3)">
+      {seccionesVisibles().map((s) => <li><a class="bjs-btn bjs-btn--secundario" href={s.href}>{s.titulo}</a></li>)}
+    </ul>
+  </div>
+</Base>

@@ -1,0 +1,20 @@
+---
+/** Selector de categoría: links a páginas estáticas. Sin JavaScript, funciona con teclado. */
+import type { Categoria } from '../../lib/cms';
+interface Props { categorias: Pick<Categoria, 'nombre' | 'slug'>[]; actual?: string }
+const { categorias, actual } = Astro.props;
+---
+<nav class="selector-cat" aria-label="Categorías">
+  <ul>
+    {categorias.map((c) => (
+      <li>
+        <a href={`/fixture/${c.slug}`} aria-current={c.slug === actual ? 'page' : undefined}>
+          {c.slug === actual && (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+          )}
+          {c.nombre}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

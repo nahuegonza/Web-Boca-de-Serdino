@@ -1,0 +1,51 @@
+---
+/** Próximo partido: el tablero del sistema de diseño (azul con franja oro). */
+import type { VistaPartido } from '../../lib/fixture';
+import type { Equipo } from '../../lib/cms';
+import { diaCorto, diaLargo, horaCorta, isoValido } from '../../lib/fechas';
+import Escudo from '../Escudo.astro';
+
+interface Props { vista: VistaPartido; propio: Equipo; categoria: string; idTitulo?: string }
+const { vista, propio, categoria, idTitulo = 'proximo-titulo' } = Astro.props;
+const p = vista.partido;
+const local = vista.condicion === 'local' ? propio : vista.rival;
+const visita = vista.condicion === 'local' ? vista.rival : propio;
+const nombre = (e: Equipo | null) => e?.nombreCorto || e?.nombre || 'A confirmar';
+const iso = isoValido(p.diaHora);
+const resumen = `${nombre(local)} contra ${nombre(visita)}, ${diaLargo(p.diaHora)}${horaCorta(p.diaHora) ? ` a las ${horaCorta(p.diaHora)}` : ''}`;
+---
+<article class="bjs-tablero bjs-sobre-azul" aria-labelledby={idTitulo}>
+  <div class="bjs-tablero__top">
+    <h2 class="bjs-tablero__titulo" id={idTitulo}>Próximo partido<span class="bjs-sr">: {resumen}</span></h2>
+    <span>{categoria}, fecha {p.fecha}</span>
+  </div>
+  <div class="bjs-tablero__equipos" aria-hidden="true">
+    <div class="bjs-tablero__eq">
+      <Escudo equipo={local} tamano={44} claro />
+      <span class="bjs-tablero__nombre">{nombre(local)}</span>
+    </div>
+    <span class="bjs-tablero__vs">vs</span>
+    <div class="bjs-tablero__eq bjs-tablero__eq--visita">
+      <Escudo equipo={visita} tamano={44} claro />
+      <span class="bjs-tablero__nombre">{nombre(visita)}</span>
+    </div>
+  </div>
+  <div class="bjs-tablero__franja">
+    {iso ? (
+      <time datetime={iso}><span>{diaCorto(p.diaHora)}</span><span>{horaCorta(p.diaHora)}</span></time>
+    ) : (
+      <span>Día a confirmar</span>
+    )}
+  </div>
+  <div class="bjs-tablero__pie">
+    <span class="bjs-tablero__cancha">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--oro-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      {vista.condicion === 'local' ? 'Local' : 'Visitante'}{p.cancha ? `, ${p.cancha}` : ''}
+    </span>
+    {p.cancha && (
+      <a class="bjs-link" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.cancha)}`} rel="noopener">
+        Cómo llegar<span class="bjs-sr"> (abre Google Maps)</span>
+      </a>
+    )}
+  </div>
+</article>

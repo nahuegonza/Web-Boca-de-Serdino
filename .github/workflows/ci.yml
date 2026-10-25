@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  sitio:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npx astro check
+      - name: Build sin CMS (verifica los estados vacíos)
+        run: npm run build
+      - name: Build con datos de prueba
+        run: npm run build
+        env:
+          DATOS_DE_PRUEBA: '1'
+
+  panel:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: npx tsc -p .
+      - run: npx sanity build --yes
+        env:
+          SANITY_STUDIO_PROJECT_ID: ci

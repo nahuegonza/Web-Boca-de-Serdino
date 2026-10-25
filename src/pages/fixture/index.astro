@@ -1,0 +1,49 @@
+---
+/** Todas las categorías con su próximo partido: una familia de inferiores encuentra el suyo en 1 toque. */
+import Base from '../../layouts/Base.astro';
+import EstadoVacio from '../../components/EstadoVacio.astro';
+import { obtenerFixture } from '../../lib/cms';
+import { equipoPropio, proximoPartido } from '../../lib/fixture';
+import { diaLargo, horaCorta } from '../../lib/fechas';
+
+const categorias = await obtenerFixture();
+const tarjetas = categorias
+  .filter((c) => c.slug)
+  .map((c) => {
+    const propio = equipoPropio(c);
+    const partidos = (c.torneo?.partidos ?? []).filter((p) => p.local && p.visitante);
+    return { categoria: c, proximo: propio ? proximoPartido(partidos, propio._id) : null };
+  });
+---
+<Base titulo="Fixture y tabla" descripcion="Fixture, resultados y tabla de posiciones de todas las categorías de Boca de Serodino.">
+  <div class="contenedor">
+    <h1 class="pagina-titulo">Fixture y tabla</h1>
+    <p style="margin:0 0 var(--space-6);max-width:68ch">Elegí la categoría para ver el fixture completo, los resultados y la tabla.</p>
+    {tarjetas.length ? (
+      <ul class="cats">
+        {tarjetas.map(({ categoria, proximo }) => (
+          <li>
+            <div class="cat-card">
+              <h2><a href={`/fixture/${categoria.slug}`}>{categoria.nombre}</a></h2>
+              {proximo ? (
+                <>
+                  <p>
+                    {proximo.condicion === 'local' ? 'Local contra ' : 'Visitante de '}
+                    <strong>{proximo.rival?.nombreCorto || proximo.rival?.nombre}</strong>
+                  </p>
+                  <p class="cat-card__suave">
+                    {diaLargo(proximo.partido.diaHora)}{horaCorta(proximo.partido.diaHora) ? `, ${horaCorta(proximo.partido.diaHora)}` : ''}
+                  </p>
+                </>
+              ) : (
+                <p class="cat-card__suave">{categoria.torneo ? 'Sin partidos programados.' : 'Sin torneo en curso.'}</p>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <EstadoVacio titulo="Todavía no hay categorías cargadas.">Cuando el club cargue el fixture en el panel, aparece acá.</EstadoVacio>
+    )}
+  </div>
+</Base>

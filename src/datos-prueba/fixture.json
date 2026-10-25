@@ -1,0 +1,92 @@
+[
+  {
+    "_id": "cat-primera", "nombre": "Primera", "slug": "primera", "esMenores": false,
+    "torneo": {
+      "_id": "t-primera", "nombre": "Apertura (datos de prueba)", "temporada": 2026, "puntosVictoria": 3, "puntosEmpate": 1,
+      "criteriosDesempate": ["puntos", "diferencia", "golesFavor", "enfrentamientoDirecto"],
+      "equipos": [
+        { "_id": "boca", "nombre": "Boca de Serodino", "nombreCorto": "Boca", "esPropio": true, "escudo": null },
+        { "_id": "ra", "nombre": "Rival A de Prueba", "nombreCorto": "Rival A", "esPropio": false, "escudo": null },
+        { "_id": "rb", "nombre": "Rival B de Prueba", "nombreCorto": "Rival B", "esPropio": false, "escudo": null },
+        { "_id": "rc", "nombre": "Rival C de Prueba", "nombreCorto": "Rival C", "esPropio": false, "escudo": null },
+        { "_id": "rd", "nombre": "Rival D de Prueba", "nombreCorto": "Rival D", "esPropio": false, "escudo": null }
+      ],
+      "ajustes": [],
+      "partidos": [
+        { "_id": "p1", "fecha": 1, "diaHora": "2026-10-04T19:00:00Z", "cancha": "Cancha de Boca, Serodino", "estado": "jugado", "golesLocal": 2, "golesVisitante": 1, "observacion": null,
+          "goleadores": [
+            { "nombre": "Martín", "apellido": "Gómez", "equipo": "local", "minuto": 23, "enContra": false },
+            { "nombre": "Lucas", "apellido": "Fernández", "equipo": "local", "minuto": 67, "enContra": false },
+            { "nombre": "Diego", "apellido": "Ruiz", "equipo": "visitante", "minuto": 80, "enContra": false }
+          ],
+          "local": { "_id": "boca", "nombre": "Boca de Serodino", "nombreCorto": "Boca", "esPropio": true, "escudo": null },
+          "visitante": { "_id": "ra", "nombre": "Rival A de Prueba", "nombreCorto": "Rival A", "esPropio": false, "escudo": null } },
+        { "_id": "p2", "fecha": 1, "diaHora": "2026-10-04T19:00:00Z", "cancha": "Cancha de Rival B", "estado": "jugado", "golesLocal": 0, "golesVisitante": 0, "observacion": null, "goleadores": null,
+          "local": { "_id": "rb", "nombre": "Rival B de Prueba", "nombreCorto": "Rival B", "esPropio": false, "escudo": null },
+          "visitante": { "_id": "rc", "nombre": "Rival C de Prueba", "nombreCorto": "Rival C", "esPropio": false, "escudo": null } },
+        { "_id": "p3", "fecha": 2, "diaHora": "2026-10-11T19:00:00Z", "cancha": "Cancha de Rival B", "estado": "jugado", "golesLocal": 1, "golesVisitante": 1, "observacion": null,
+          "goleadores": [{ "nombre": "Martín", "apellido": "Gómez", "equipo": "visitante", "minuto": 55, "enContra": false }],
+          "local": { "_id": "rb", "nombre": "Rival B de Prueba", "nombreCorto": "Rival B", "esPropio": false, "escudo": null },
+          "visitante": { "_id": "boca", "nombre": "Boca de Serodino", "nombreCorto": "Boca", "esPropio": true, "escudo": null } },
+        { "_id": "p4", "fecha": 2, "diaHora": "2026-10-11T19:00:00Z", "cancha": "Cancha de Rival A", "estado": "jugado", "golesLocal": 3, "golesVisitante": 0, "observacion": null, "goleadores": null,
+          "local": { "_id": "ra", "nombre": "Rival A de Prueba", "nombreCorto": "Rival A", "esPropio": false, "escudo": null },
+          "visitante": { "_id": "rd", "nombre": "Rival D de Prueba", "nombreCorto": "Rival D", "esPropio": false, "escudo": null } },
+        { "_id": "p5", "fecha": 3, "diaHora": "2026-10-18T19:00:00Z", "cancha": "Cancha de Boca, Serodino", "estado": "suspendido", "golesLocal": null, "golesVisitante": null, "observacion": "Por lluvia. Nueva fecha a confirmar.", "goleadores": null,
+          "local": { "_id": "boca", "nombre": "Boca de Serodino", "nombreCorto": "Boca", "esPropio": true, "escudo": null },
+          "visitante": { "_id": "rc", "nombre": "Rival C de Prueba", "nombreCorto": "Rival C", "esPropio": false, "escudo": null } },
+        { "_id": "p6", "fecha": 3, "diaHora": "2026-10-18T19:00:00Z", "cancha": "Cancha de Rival D", "estado": "jugado", "golesLocal": 1, "golesVisitante": 2, "observacion": null, "goleadores": null,
+          "local": { "_id": "rd", "nombre": "Rival D de Prueba", "nombreCorto": "Rival D", "esPropio": false, "escudo": null },
+          "visitante": { "_id": "rb", "nombre": "Rival B de Prueba", "nombreCorto": "Rival B", "esPropio": false, "escudo": null } },
+        { "_id": "p7", "fecha": 4, "diaHora": "2026-11-01T19:00:00Z", "cancha": "Cancha de Rival D", "estado": "programado", "golesLocal": null, "golesVisitante": null, "observacion": null, "goleadores": null,
+          "local": { "_id": "rd", "nombre": "Rival D de Prueba", "nombreCorto": "Rival D", "esPropio": false, "escudo": null },
+          "visitante": { "_id": "boca", "nombre": "Boca de Serodino", "nombreCorto": "Boca", "esPropio": true, "escudo": null } },
+        { "_id": "p8", "fecha": 4, "diaHora": "2026-11-01T19:00:00Z", "cancha": "Cancha de Rival A", "estado": "programado", "golesLocal": null, "golesVisitante": null, "observacion": null, "goleadores": null,
+          "local": { "_id": "ra", "nombre": "Rival A de Prueba", "nombreCorto": "Rival A", "esPropio": false, "escudo": null },
+          "visitante": { "_id": "rc", "nombre": "Rival C de Prueba", "nombreCorto": "Rival C", "esPropio": false, "escudo": null } },
+        { "_id": "p9", "fecha": 5, "diaHora": "2026-11-08T19:00:00Z", "cancha": "Cancha de Boca, Serodino", "estado": "programado", "golesLocal": null, "golesVisitante": null, "observacion": null, "goleadores": null,
+          "local": { "_id": "boca", "nombre": "Boca de Serodino", "nombreCorto": "Boca", "esPropio": true, "escudo": null },
+          "visitante": { "_id": "rb", "nombre": "Rival B de Prueba", "nombreCorto": "Rival B", "esPropio": false, "escudo": null } },
+        { "_id": "p10", "fecha": 6, "diaHora": "2026-11-15T19:00:00Z", "cancha": "Cancha de Rival A", "estado": "programado", "golesLocal": null, "golesVisitante": null, "observacion": null, "goleadores": null,
+          "local": { "_id": "ra", "nombre": "Rival A de Prueba", "nombreCorto": "Rival A", "esPropio": false, "escudo": null },
+          "visitante": { "_id": "rb", "nombre": "Rival B de Prueba", "nombreCorto": "Rival B", "esPropio": false, "escudo": null } }
+      ]
+    }
+  },
+  {
+    "_id": "cat-reserva", "nombre": "Reserva", "slug": "reserva", "esMenores": false,
+    "torneo": {
+      "_id": "t-reserva", "nombre": "Apertura (datos de prueba)", "temporada": 2026, "puntosVictoria": 3, "puntosEmpate": 1, "criteriosDesempate": null,
+      "equipos": [
+        { "_id": "boca-r", "nombre": "Boca de Serodino", "nombreCorto": "Boca", "esPropio": true, "escudo": null },
+        { "_id": "ra-r", "nombre": "Rival A de Prueba", "nombreCorto": "Rival A", "esPropio": false, "escudo": null }
+      ],
+      "ajustes": [], "partidos": []
+    }
+  },
+  {
+    "_id": "cat-sub15", "nombre": "Sub-15", "slug": "sub-15", "esMenores": true,
+    "torneo": {
+      "_id": "t-sub15", "nombre": "Torneo de inferiores (datos de prueba)", "temporada": 2026, "puntosVictoria": 3, "puntosEmpate": 1, "criteriosDesempate": ["puntos", "enfrentamientoDirecto", "diferencia"],
+      "equipos": [
+        { "_id": "boca15", "nombre": "Boca de Serodino", "nombreCorto": "Boca", "esPropio": true, "escudo": null },
+        { "_id": "s1", "nombre": "Rival A de Prueba", "nombreCorto": "Rival A", "esPropio": false, "escudo": null },
+        { "_id": "s2", "nombre": "Rival B de Prueba", "nombreCorto": "Rival B", "esPropio": false, "escudo": null }
+      ],
+      "ajustes": [{ "puntos": -3, "motivo": "Sanción del Tribunal de Disciplina (dato de prueba)", "equipoId": "s2", "equipoNombre": "Rival B de Prueba" }],
+      "partidos": [
+        { "_id": "q1", "fecha": 1, "diaHora": "2026-10-17T15:00:00Z", "cancha": "Cancha de Boca, Serodino", "estado": "jugado", "golesLocal": 3, "golesVisitante": 2, "observacion": null,
+          "goleadores": [
+            { "nombre": "Juan Martín", "apellido": "Pérez", "equipo": "local", "minuto": 12, "enContra": false },
+            { "nombre": "Sofía", "apellido": "de la Torre", "equipo": "local", "minuto": 30, "enContra": false },
+            { "nombre": "Tomás", "apellido": "Ríos", "equipo": "visitante", "minuto": 41, "enContra": true }
+          ],
+          "local": { "_id": "boca15", "nombre": "Boca de Serodino", "nombreCorto": "Boca", "esPropio": true, "escudo": null },
+          "visitante": { "_id": "s1", "nombre": "Rival A de Prueba", "nombreCorto": "Rival A", "esPropio": false, "escudo": null } },
+        { "_id": "q2", "fecha": 2, "diaHora": "2026-10-31T15:00:00Z", "cancha": "Cancha de Rival B", "estado": "programado", "golesLocal": null, "golesVisitante": null, "observacion": null, "goleadores": null,
+          "local": { "_id": "s2", "nombre": "Rival B de Prueba", "nombreCorto": "Rival B", "esPropio": false, "escudo": null },
+          "visitante": { "_id": "boca15", "nombre": "Boca de Serodino", "nombreCorto": "Boca", "esPropio": true, "escudo": null } }
+      ]
+    }
+  },
+  { "_id": "cat-femenino", "nombre": "Femenino", "slug": "femenino", "esMenores": false, "torneo": null }
+]

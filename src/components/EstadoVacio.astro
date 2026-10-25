@@ -1,0 +1,10 @@
+---
+/** Estado "sin datos": qué falta y qué hacer mientras tanto. */
+interface Props { titulo: string; accion?: { texto: string; href: string } }
+const { titulo, accion } = Astro.props;
+---
+<div class="bjs-vacio">
+  <strong>{titulo}</strong>
+  <slot />
+  {accion && <a class="bjs-link" href={accion.href}>{accion.texto}</a>}
+</div>

@@ -1,0 +1,81 @@
+---
+/** Una fecha del fixture: nuestro partido destacado y el resto de la fecha desplegable. */
+import type { FechaFixture } from '../../lib/fixture';
+import type { Partido } from '../../lib/cms';
+import { diaLargo, horaCorta, isoValido } from '../../lib/fechas';
+import Escudo from '../Escudo.astro';
+
+interface Props { fecha: FechaFixture; esProxima?: boolean }
+const { fecha, esProxima = false } = Astro.props;
+const v = fecha.nuestro;
+const p = v?.partido;
+const nombre = (e: { nombre: string; nombreCorto?: string | null } | null | undefined) => e?.nombreCorto || e?.nombre || 'A confirmar';
+const diaReferencia = p?.diaHora ?? fecha.otros.find((o) => o.diaHora)?.diaHora ?? null;
+const centro = (o: Partido) =>
+  o.estado === 'jugado' && o.golesLocal != null && o.golesVisitante != null
+    ? `${o.golesLocal} – ${o.golesVisitante}`
+    : o.estado === 'suspendido'
+      ? 'Susp.'
+      : o.estado === 'postergado'
+        ? 'Post.'
+        : horaCorta(o.diaHora) || 'vs';
+const etiquetaResultado = { gano: 'Ganó', empato: 'Empató', perdio: 'Perdió' } as const;
+const letra = { gano: 'G', empato: 'E', perdio: 'P' } as const;
+---
+<li class:list={['fecha', { 'fecha--proxima': esProxima }]} id={`fecha-${fecha.numero}`}>
+  <div class="fecha__cab">
+    <h3 class="fecha__numero">Fecha {fecha.numero}{esProxima && <span class="bjs-sr"> (próxima)</span>}</h3>
+    {diaReferencia && <time class="fecha__dia" datetime={isoValido(diaReferencia)}>{diaLargo(diaReferencia)}</time>}
+  </div>
+
+  {v && p ? (
+    <>
+      <div class="fecha__nuestro">
+        <div class="fecha__rival">
+          <Escudo equipo={v.rival} tamano={32} />
+          <div>
+            <span class="fecha__condicion">{v.condicion === 'local' ? 'Local contra' : 'Visitante de'}</span>
+            <div class="fecha__rival-nombre">{nombre(v.rival)}</div>
+          </div>
+        </div>
+        {v.resultado ? (
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+            <span class="fecha__marcador"><span class="bjs-sr">Boca </span>{v.golesPropios} – {v.golesRival}</span>
+            <span class={`bjs-estado bjs-estado--${v.resultado}`}><span aria-hidden="true">{letra[v.resultado]}</span> {etiquetaResultado[v.resultado]}</span>
+          </div>
+        ) : p.estado === 'suspendido' || p.estado === 'postergado' ? (
+          <span class="bjs-estado bjs-estado--alerta">{p.estado === 'suspendido' ? 'Suspendido' : 'Postergado'}</span>
+        ) : (
+          <span class="fecha__hora">{horaCorta(p.diaHora) || 'A conf.'}</span>
+        )}
+      </div>
+      <p class="fecha__meta">
+        {p.cancha && (
+          <span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            {p.cancha}
+          </span>
+        )}
+        {!p.diaHora && <span>Día y hora a confirmar</span>}
+      </p>
+      {p.observacion && (p.estado === 'suspendido' || p.estado === 'postergado') && <p class="fecha__aviso">{p.observacion}</p>}
+    </>
+  ) : (
+    <p class="fecha__libre">Boca tiene fecha libre.</p>
+  )}
+
+  {fecha.otros.length > 0 && (
+    <details>
+      <summary>Otros partidos de la fecha ({fecha.otros.length})</summary>
+      <ul class="otros">
+        {fecha.otros.map((o) => (
+          <li>
+            <span>{nombre(o.local)}</span>
+            <span class:list={['otros__centro', { 'otros__centro--jugado': o.estado === 'jugado' }]}>{centro(o)}</span>
+            <span class="otros__visita">{nombre(o.visitante)}</span>
+          </li>
+        ))}
+      </ul>
+    </details>
+  )}
+</li>
