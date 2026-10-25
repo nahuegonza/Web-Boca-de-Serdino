@@ -1,0 +1,22 @@
+---
+/**
+ * Foto grande de portada. Es el elemento más grande de la Home (LCP):
+ * se carga con prioridad alta, en AVIF/WebP y del ancho justo para cada pantalla.
+ * El degradé arranca por encima del título para que el texto se lea aun sobre fotos claras.
+ */
+import type { ImagenCMS } from '../../lib/cms';
+import Imagen from '../Imagen.astro';
+
+interface Props { imagen?: ImagenCMS | null; titulo: string; bajada?: string | null }
+const { imagen, titulo, bajada } = Astro.props;
+---
+<section class="hero" aria-labelledby="hero-titulo">
+  <div class="hero__foto">
+    <Imagen imagen={imagen} ancho={1920} alto={1080} anchos={[480, 768, 1080, 1440, 1920]} sizes="100vw" prioridad alt={imagen?.alt ?? ''} />
+  </div>
+  <div class="hero__velo" aria-hidden="true"></div>
+  <div class="contenedor hero__texto">
+    <h1 class="hero__titulo" id="hero-titulo">{titulo}</h1>
+    {bajada && <p class="hero__bajada">{bajada}</p>}
+  </div>
+</section>

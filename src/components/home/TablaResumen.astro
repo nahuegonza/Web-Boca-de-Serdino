@@ -1,0 +1,28 @@
+---
+/** Tabla corta para la Home: los 4 primeros y nuestro equipo si está más abajo. */
+import type { FilaTabla } from '../../lib/tabla';
+import EscudoProvisorio from '../EscudoProvisorio.astro';
+
+interface Props { filas: FilaTabla[]; titulo: string; href: string }
+const { filas, titulo, href } = Astro.props;
+const top = filas.slice(0, 4);
+const nuestra = filas.find((f) => f.equipo.esPropio);
+const mostrar = nuestra && !top.includes(nuestra) ? [...top, nuestra] : top;
+---
+<div class="bjs-tabla-wrap">
+  <table class="bjs-tabla">
+    <caption>{titulo}</caption>
+    <thead><tr><th scope="col"><abbr title="Posición">Pos</abbr></th><th scope="col">Equipo</th><th scope="col"><abbr title="Partidos jugados">PJ</abbr></th><th scope="col"><abbr title="Puntos">Pts</abbr></th></tr></thead>
+    <tbody>
+      {mostrar.map((f, i) => (
+        <tr class:list={{ 'bjs-fila--nuestra': f.equipo.esPropio }} style={i === 4 ? 'border-top:2px dashed var(--linea)' : undefined}>
+          <td>{f.posicion}</td>
+          <td><span class="bjs-fila__eq">{f.equipo.esPropio && <EscudoProvisorio ancho={16} />}{f.equipo.nombre}</span></td>
+          <td>{f.pj}</td>
+          <td>{f.pts}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <p class="bjs-tabla__pie"><a class="bjs-link" href={href}>Tabla completa</a></p>
+</div>

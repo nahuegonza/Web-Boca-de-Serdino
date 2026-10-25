@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+// Se precarga la tipografía de títulos: aparece arriba de todo en cada página.
+import fuenteTitulos from '@fontsource/big-shoulders-display/files/big-shoulders-display-latin-900-normal.woff2?url';
 import Seo from '../components/Seo.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -25,6 +27,7 @@ const desc = descripcion || config.descripcionSitio || 'Sitio oficial del Club A
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0B2E73" />
+    <link rel="preload" href={fuenteTitulos} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <Seo titulo={tituloCompleto} descripcion={desc} imagen={imagen ?? config.imagenCompartir} tipo={tipo} noIndexar={noIndexar} jsonLd={jsonLd} nombreSitio={nombreSitio} />

@@ -308,3 +308,44 @@
 .mapa__lugar { margin: 0; color: var(--texto); font-weight: 700; }
 .mapa__acciones { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-3); }
 .mapa__iframe { display: block; width: 100%; height: 320px; border: 0; }
+
+/* Botón "Pruebas" visible en el header del celular */
+.sitio-pruebas { margin-left: auto; display: inline-flex; align-items: center; min-height: 40px; padding: 0 var(--space-4); border-radius: var(--radius-pill); background: var(--acento); color: var(--azul-900); font-weight: 700; text-decoration: none; }
+.sitio-pruebas:hover { background: var(--oro-300); color: var(--azul-900); }
+@media (min-width: 64rem) { .sitio-pruebas { display: none; } }
+
+/* Home */
+.hero { position: relative; isolation: isolate; background: var(--azul-900); min-height: 340px; display: flex; align-items: flex-end; overflow: hidden; }
+.hero__foto { position: absolute; inset: 0; z-index: -2; }
+.hero__foto picture, .hero__foto img, .hero__foto .imagen-vacia { width: 100%; height: 100% !important; aspect-ratio: auto !important; object-fit: cover; }
+.hero__foto .imagen-vacia { background: var(--azul-800); }
+/* El velo empieza bien arriba del título: con fotos claras el texto blanco igual supera 4.5:1. */
+.hero__velo { position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgb(4 18 47 / 0.15) 0%, rgb(4 18 47 / 0.55) 30%, rgb(4 18 47 / 0.86) 55%, rgb(4 18 47 / 0.94) 100%); }
+.hero__texto { padding-top: var(--space-20); padding-bottom: calc(var(--space-16) + var(--space-4)); color: var(--blanco); }
+.hero__titulo { margin: 0; font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: 46px; line-height: 0.92; max-width: 14ch; overflow-wrap: anywhere; }
+.hero__bajada { margin: var(--space-3) 0 0; font-size: 18px; line-height: 1.5; max-width: 46ch; }
+@media (min-width: 64rem) {
+  .hero { min-height: 520px; }
+  .hero__velo { background: linear-gradient(90deg, rgb(4 18 47 / 0.94) 0%, rgb(4 18 47 / 0.82) 40%, rgb(4 18 47 / 0.25) 75%, rgb(4 18 47 / 0.1) 100%); }
+  .hero__titulo { font-size: 96px; }
+  .hero__texto { padding-bottom: calc(var(--space-20) + var(--space-12)); }
+}
+.home-tablero { margin-top: calc(var(--space-12) * -1); position: relative; }
+@media (min-width: 64rem) { .home-tablero { margin-top: calc(var(--space-20) * -1); } }
+.proximos__chips { display: flex; gap: var(--space-2); overflow-x: auto; padding: var(--space-1) 0 var(--space-3); }
+.proximos__chips .filtro-pos__chip { flex: 0 0 auto; background: var(--superficie); }
+.proximos__chips .filtro-pos__chip[aria-pressed="true"] { background: var(--primario); }
+.proximos__otras { margin: var(--space-3) 0 0; }
+.tablero-cuenta { margin: 0; padding: var(--space-2) var(--space-6); background: var(--azul-800); color: var(--oro-200); font-weight: 700; font-size: 15px; }
+.franja-pruebas { margin-top: var(--space-12); background: var(--primario); color: var(--blanco); }
+.franja-pruebas__oro { height: 14px; background: var(--acento); }
+.franja-pruebas__contenido { display: flex; flex-wrap: wrap; gap: var(--space-5) var(--space-10); align-items: center; justify-content: space-between; padding-top: var(--space-8); padding-bottom: var(--space-8); }
+.franja-pruebas__titulo { margin: 0; font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: 40px; line-height: 0.92; }
+.franja-pruebas__texto { margin: var(--space-2) 0 0; font-size: 17px; max-width: 52ch; }
+.franja-pruebas__acciones { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+@media (min-width: 64rem) { .franja-pruebas__titulo { font-size: 60px; } }
+.home-resultado__grilla { display: grid; gap: var(--space-5); align-items: start; }
+@media (min-width: 48rem) { .home-resultado__grilla { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.home-resultado .bjs-resultado, .home-resultado .bjs-tabla-wrap { max-width: none; }
+.home-cabecera { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); flex-wrap: wrap; }
+.home-cabecera .bjs-link { min-height: 44px; display: inline-flex; align-items: center; }

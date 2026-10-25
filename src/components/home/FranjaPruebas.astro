@@ -1,0 +1,31 @@
+---
+/** Llamado a inscribirse: 1 toque a WhatsApp desde la Home. */
+import type { Convocatoria } from '../../lib/cms';
+import { enlaceWhatsApp } from '../../lib/inscripcion';
+
+interface Props { convocatorias: Convocatoria[]; whatsapp?: string | null }
+const { convocatorias, whatsapp } = Astro.props;
+const abiertas = convocatorias.filter((c) => !c.cupoAgotado);
+const enlace = enlaceWhatsApp(whatsapp, '¡Hola! Quiero anotarme a las pruebas de Boca de Serodino.');
+const lista = abiertas.map((c) => c.categoria).join(', ');
+---
+<section class="franja-pruebas" aria-labelledby="t-pruebas">
+  <div class="franja-pruebas__oro" aria-hidden="true"></div>
+  <div class="contenedor franja-pruebas__contenido bjs-sobre-azul">
+    <div>
+      <h2 class="franja-pruebas__titulo" id="t-pruebas">¿Querés jugar en Boca?</h2>
+      <p class="franja-pruebas__texto">
+        {abiertas.length ? `Pruebas abiertas: ${lista}. Escribinos y te decimos qué traer.` : 'Escribinos y te avisamos cuando abran las próximas pruebas.'}
+      </p>
+    </div>
+    <div class="franja-pruebas__acciones">
+      {enlace && (
+        <a class="bjs-btn bjs-btn--primario" href={enlace} rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.6 7.3L3 21l2.2-5.4A8.4 8.4 0 1 1 21 11.5z"></path></svg>
+          Escribir por WhatsApp<span class="bjs-sr"> (abre WhatsApp)</span>
+        </a>
+      )}
+      <a class="bjs-btn bjs-btn--secundario" href="/pruebas">{abiertas.length ? 'Ver días y categorías' : 'Ver cómo son las pruebas'}</a>
+    </div>
+  </div>
+</section>
