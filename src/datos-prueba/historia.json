@@ -1,0 +1,148 @@
+{
+ "identidad": {
+  "anioFundacion": null,
+  "introduccion": [
+   {
+    "_type": "block",
+    "_key": "k360177",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Introducción de prueba: la comisión cuenta cómo nació el club. Año de fundación: a confirmar.]",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "escudo": null,
+  "significadoEscudo": [
+   {
+    "_type": "block",
+    "_key": "k187080",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "s",
+      "text": "[Significado del escudo, a cargar por la comisión.]",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "colores": [
+   {
+    "nombre": "Azul",
+    "hex": "#0B2E73",
+    "significado": "[Significado a confirmar]"
+   },
+   {
+    "nombre": "Oro",
+    "hex": "#F4B400",
+    "significado": "[Significado a confirmar]"
+   },
+   {
+    "nombre": "Inválido de prueba",
+    "hex": "red",
+    "significado": "No debe mostrarse"
+   }
+  ],
+  "periodoComision": "[2025-2027]"
+ },
+ "hitos": [
+  {
+   "_id": "h1",
+   "anio": 1960,
+   "titulo": "[Hito de prueba: inauguración de la cancha]",
+   "texto": "[Texto de prueba]",
+   "foto": {
+    "url": "http://localhost:4400/historica1.jpg",
+    "ancho": 1200,
+    "alto": 900,
+    "alt": "Foto histórica de prueba"
+   }
+  },
+  {
+   "_id": "h2",
+   "anio": 1985,
+   "titulo": "[Hito de prueba: primer campeonato]",
+   "texto": null,
+   "foto": null
+  }
+ ],
+ "fotos": [
+  {
+   "_id": "f1",
+   "anio": 1960,
+   "epigrafe": "[Epígrafe de prueba 1]",
+   "imagen": {
+    "url": "http://localhost:4400/historica1.jpg",
+    "ancho": 1200,
+    "alto": 900,
+    "alt": "Foto histórica de prueba 1"
+   }
+  },
+  {
+   "_id": "f2",
+   "anio": 1970,
+   "epigrafe": "[Epígrafe de prueba 2]",
+   "imagen": {
+    "url": "http://localhost:4400/historica2.jpg",
+    "ancho": 1200,
+    "alto": 900,
+    "alt": "Foto histórica de prueba 2"
+   }
+  },
+  {
+   "_id": "f3",
+   "anio": 1980,
+   "epigrafe": "[Epígrafe de prueba 3]",
+   "imagen": {
+    "url": "http://localhost:4400/historica3.jpg",
+    "ancho": 1200,
+    "alto": 900,
+    "alt": "Foto histórica de prueba 3"
+   }
+  },
+  {
+   "_id": "f4",
+   "anio": 1990,
+   "epigrafe": "[Epígrafe de prueba 4]",
+   "imagen": {
+    "url": "http://localhost:4400/historica4.jpg",
+    "ancho": 1200,
+    "alto": 900,
+    "alt": "Foto histórica de prueba 4"
+   }
+  }
+ ],
+ "comision": [
+  {
+   "_id": "c1",
+   "cargo": "Presidente",
+   "nombre": "[Nombre y apellido]",
+   "foto": {
+    "url": "http://localhost:4400/comision1.jpg",
+    "ancho": 600,
+    "alto": 600,
+    "alt": ""
+   }
+  },
+  {
+   "_id": "c2",
+   "cargo": "Secretaria",
+   "nombre": "[Nombre y apellido]",
+   "foto": null
+  },
+  {
+   "_id": "c3",
+   "cargo": "Tesorero",
+   "nombre": "[Nombre y apellido]",
+   "foto": null
+  }
+ ]
+}

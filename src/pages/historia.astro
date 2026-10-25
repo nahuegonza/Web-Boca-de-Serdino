@@ -1,0 +1,123 @@
+---
+import Base from '../layouts/Base.astro';
+import Imagen from '../components/Imagen.astro';
+import TextoRico from '../components/TextoRico.astro';
+import Galeria from '../components/Galeria.astro';
+import EstadoVacio from '../components/EstadoVacio.astro';
+import EscudoProvisorio from '../components/EscudoProvisorio.astro';
+import { obtenerHistoria } from '../lib/cms';
+import { aniosDeVida, coloresValidos, lineaDeTiempo } from '../lib/historia';
+
+const { identidad, hitos, fotos, comision } = await obtenerHistoria();
+const linea = lineaDeTiempo(hitos, identidad.anioFundacion);
+const colores = coloresValidos(identidad.colores);
+const anios = aniosDeVida(identidad.anioFundacion);
+const hayIdentidad = !!(identidad.escudo || identidad.significadoEscudo?.length || colores.length);
+const descripcion = identidad.anioFundacion
+  ? `Historia del Club Atlético Boca Juniors de Serodino desde ${identidad.anioFundacion}: hitos, escudo, colores, fotos históricas y comisión directiva.`
+  : 'Historia del Club Atlético Boca Juniors de Serodino: hitos, escudo, colores, fotos históricas y comisión directiva.';
+---
+<Base titulo="Historia e identidad" descripcion={descripcion}>
+  <div class="contenedor">
+    <h1 class="pagina-titulo">Nuestra historia</h1>
+    {(identidad.anioFundacion || identidad.introduccion?.length) ? (
+      <div class="historia-intro">
+        {identidad.anioFundacion && (
+          <p class="historia-intro__dato">
+            Desde <strong>{identidad.anioFundacion}</strong>{anios ? `, ${anios} años` : ''} en Serodino
+          </p>
+        )}
+        <TextoRico bloques={identidad.introduccion} />
+      </div>
+    ) : null}
+
+    <section class="seccion" aria-labelledby="t-linea">
+      <h2 class="seccion-titulo" id="t-linea">Línea de tiempo</h2>
+      {linea.length ? (
+        <ol class="linea">
+          {linea.map((h) => (
+            <li class="linea__hito">
+              <p class="linea__anio">{h.anio}</p>
+              <div class="linea__contenido">
+                <h3 class="linea__titulo">{h.titulo}</h3>
+                {h.texto && <p class="linea__texto">{h.texto}</p>}
+                {h.foto && (
+                  <div class="linea__foto">
+                    <Imagen imagen={h.foto} ancho={640} alto={420} anchos={[320, 480, 640]} sizes="(min-width: 48rem) 480px, 100vw" />
+                  </div>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <EstadoVacio titulo="Estamos armando la línea de tiempo del club.">
+          Si tenés datos o fotos de la historia del club, acercalos a la secretaría.
+        </EstadoVacio>
+      )}
+    </section>
+
+    <section class="seccion" aria-labelledby="t-identidad">
+      <h2 class="seccion-titulo" id="t-identidad">Escudo y colores</h2>
+      {hayIdentidad ? (
+        <div class="identidad">
+          <div class="identidad__escudo">
+            {identidad.escudo ? (
+              <Imagen imagen={identidad.escudo} ancho={320} alto={Math.round((320 * (identidad.escudo.alto || 366)) / (identidad.escudo.ancho || 320))} anchos={[160, 320, 480]} sizes="200px" ajuste="contain" alt={identidad.escudo.alt || 'Escudo del club'} />
+            ) : (
+              <EscudoProvisorio ancho={160} />
+            )}
+          </div>
+          <div class="identidad__texto">
+            {identidad.significadoEscudo?.length ? <TextoRico bloques={identidad.significadoEscudo} /> : null}
+            {colores.length > 0 && (
+              <ul class="colores">
+                {colores.map((c) => (
+                  <li class="colores__item">
+                    <span class="colores__muestra" style={`background:${c.hex}`} aria-hidden="true"></span>
+                    <div>
+                      <p class="colores__nombre">{c.nombre}</p>
+                      {c.significado && <p class="colores__significado">{c.significado}</p>}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      ) : (
+        <EstadoVacio titulo="Pronto vamos a contar qué significan el escudo y los colores." />
+      )}
+    </section>
+
+    <section class="seccion" aria-labelledby="t-fotos">
+      <h2 class="seccion-titulo" id="t-fotos">Fotos históricas</h2>
+      {fotos.length ? (
+        <Galeria fotos={fotos.map((f) => ({ ...f.imagen, epigrafe: f.epigrafe, anio: f.anio }))} titulo="Fotos históricas" id="historia" />
+      ) : (
+        <EstadoVacio titulo="Todavía no subimos fotos históricas.">¿Tenés fotos viejas del club? Acercalas a la secretaría para digitalizarlas.</EstadoVacio>
+      )}
+    </section>
+
+    <section class="seccion" aria-labelledby="t-comision">
+      <h2 class="seccion-titulo" id="t-comision">Comisión directiva{identidad.periodoComision ? ` ${identidad.periodoComision}` : ''}</h2>
+      {comision.length ? (
+        <ul class="comision">
+          {comision.map((m) => (
+            <li class="comision__item">
+              <div class="comision__foto">
+                <Imagen imagen={m.foto} ancho={160} alto={160} anchos={[96, 160, 240]} sizes="80px" alt="" />
+              </div>
+              <div>
+                <p class="comision__cargo">{m.cargo}</p>
+                <p class="comision__nombre">{m.nombre}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <EstadoVacio titulo="Todavía no cargamos la comisión directiva." />
+      )}
+    </section>
+  </div>
+</Base>
