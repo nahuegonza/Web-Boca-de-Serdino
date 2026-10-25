@@ -1,0 +1,31 @@
+---
+import type { Sponsor } from '../../lib/cms';
+import Imagen from '../Imagen.astro';
+
+interface Props { sponsor: Sponsor; principal?: boolean }
+const { sponsor, principal = false } = Astro.props;
+const url = sponsor.url && /^https?:\/\//.test(sponsor.url) ? sponsor.url : null;
+const Etiqueta = url ? 'a' : 'div';
+const nivel = { principal: 'Sponsor principal', oficial: 'Sponsor oficial', colaborador: 'Colaborador' }[sponsor.nivel];
+---
+<Etiqueta
+  class:list={['bjs-sponsor', principal ? 'bjs-sponsor--principal' : 'bjs-sponsor--oficial', 'sponsor']}
+  href={url ?? undefined}
+  rel={url ? 'noopener sponsored' : undefined}
+  aria-label={!principal && url ? `${sponsor.nombre}, visitar sitio` : undefined}
+>
+  {sponsor.logo ? (
+    <span class="sponsor__logo">
+      <Imagen imagen={sponsor.logo} ancho={240} alto={120} anchos={[160, 240, 360]} sizes={principal ? '200px' : '150px'} alt={principal ? '' : sponsor.nombre} ajuste="contain" />
+    </span>
+  ) : (
+    !principal && <span class="bjs-sponsor__sinlogo">{sponsor.nombre}</span>
+  )}
+  {principal && (
+    <span class="bjs-sponsor__texto">
+      <span class="bjs-sponsor__nivel">{nivel}</span>
+      <span class="bjs-sponsor__nombre">{sponsor.nombre}</span>
+    </span>
+  )}
+  {principal && url && <span class="bjs-sponsor__accion">Visitar sitio</span>}
+</Etiqueta>

@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import EstadoError from '../../components/EstadoError.astro';
+---
+<Base titulo="No pudimos enviar el mensaje" noIndexar>
+  <div class="contenedor">
+    <h1 class="pagina-titulo">No se envió</h1>
+    <EstadoError titulo="Tu mensaje no llegó." accion={{ texto: 'Volver al formulario', href: '/contacto' }}>
+      Puede faltar algún dato o haber muchos envíos desde tu conexión. Revisá el formulario y probá de nuevo, o escribinos por WhatsApp.
+    </EstadoError>
+  </div>
+</Base>

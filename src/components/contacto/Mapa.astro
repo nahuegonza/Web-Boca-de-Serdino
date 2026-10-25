@@ -1,0 +1,46 @@
+---
+/**
+ * Mapa liviano: no carga nada de terceros hasta que alguien toca "Mostrar mapa".
+ * Sin JavaScript, queda el link a Google Maps.
+ */
+interface Props { latitud?: number | null; longitud?: number | null; lugar: string }
+const { latitud, longitud, lugar } = Astro.props;
+const valido = typeof latitud === 'number' && typeof longitud === 'number' && Math.abs(latitud) <= 90 && Math.abs(longitud) <= 180;
+const lat = valido ? latitud! : 0;
+const lon = valido ? longitud! : 0;
+const bbox = [lon - 0.008, lat - 0.005, lon + 0.008, lat + 0.005].map((n) => n.toFixed(5)).join(',');
+const osm = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lon}`;
+const google = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
+---
+{valido && (
+  <div class="mapa" data-mapa data-src={osm} data-titulo={`Mapa: ${lugar}`}>
+    <div class="mapa__fachada" data-fachada>
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      <p class="mapa__lugar">{lugar}</p>
+      <div class="mapa__acciones">
+        <button type="button" class="bjs-btn bjs-btn--secundario" data-mostrar hidden>Mostrar mapa</button>
+        <a class="bjs-btn bjs-btn--primario" href={google} rel="noopener">Cómo llegar<span class="bjs-sr"> (abre Google Maps)</span></a>
+      </div>
+    </div>
+  </div>
+)}
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-mapa]').forEach((mapa) => {
+    const boton = mapa.querySelector<HTMLButtonElement>('[data-mostrar]');
+    if (!boton) return;
+    boton.hidden = false;
+    boton.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = mapa.dataset.src ?? '';
+      iframe.title = mapa.dataset.titulo ?? 'Mapa';
+      iframe.loading = 'lazy';
+      iframe.referrerPolicy = 'no-referrer';
+      iframe.className = 'mapa__iframe';
+      mapa.querySelector('[data-fachada]')?.classList.add('mapa__fachada--compacta');
+      boton.remove();
+      mapa.prepend(iframe);
+      iframe.focus();
+    });
+  });
+</script>

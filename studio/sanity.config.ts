@@ -1,7 +1,7 @@
 import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { esESLocale } from '@sanity/locale-es-es';
-import { schemaTypes } from './schemas';
+import { schemaTypes, UNICOS } from './schemas';
 import { structure } from './structure';
 
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || '';
@@ -15,11 +15,11 @@ export default defineConfig({
   plugins: [structureTool({ structure }), esESLocale()],
   schema: {
     types: schemaTypes,
-    // "Configuración del club" es un documento único: no se crea desde "Nuevo".
-    templates: (templates) => templates.filter((t) => t.schemaType !== 'configuracion'),
+    // Los documentos únicos no se crean desde "Nuevo".
+    templates: (templates) => templates.filter((t) => !UNICOS.includes(t.schemaType)),
   },
   document: {
     actions: (acciones, ctx) =>
-      ctx.schemaType === 'configuracion' ? acciones.filter((a) => a.action !== 'duplicate' && a.action !== 'delete' && a.action !== 'unpublish') : acciones,
+      UNICOS.includes(ctx.schemaType) ? acciones.filter((a) => a.action !== 'duplicate' && a.action !== 'delete' && a.action !== 'unpublish') : acciones,
   },
 });

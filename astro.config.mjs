@@ -11,7 +11,10 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'never',
   build: { format: 'file' },
-  integrations: [sitemap()],
+  integrations: [
+    // Las páginas de resultado de formularios y la 404 no van al sitemap (además llevan noindex).
+    sitemap({ filter: (pagina) => !/\/(contacto\/(enviado|no-enviado)|404)/.test(pagina) }),
+  ],
   image: {
     // Las imágenes del CMS se descargan y optimizan en el build (AVIF/WebP)
     // y se sirven desde Cloudflare, sin consumir el ancho de banda de Sanity.

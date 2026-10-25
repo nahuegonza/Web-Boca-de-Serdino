@@ -1,0 +1,140 @@
+---
+/**
+ * Formulario de contacto o de empresas interesadas.
+ * Funciona sin JavaScript (envío normal) y con JavaScript (sin recargar, con estados de envío y error).
+ * Anti-spam: campo trampa invisible + Cloudflare Turnstile (si está configurado) + límite por IP en el servidor.
+ */
+import type { TipoConsulta } from '../../lib/contacto';
+import { LIMITES_CAMPOS } from '../../lib/contacto';
+
+interface Props { tipo: TipoConsulta; id: string }
+const { tipo, id } = Astro.props;
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
+const sp = tipo === 'sponsor';
+const campo = (n: string) => `${id}-${n}`;
+---
+<form class="form-contacto" method="post" action="/api/contacto" novalidate data-form-contacto data-id={id}>
+  <input type="hidden" name="tipo" value={tipo} />
+  <div class="bjs-error" role="alert" tabindex="-1" hidden data-error-general></div>
+  <div class="bjs-vacio form-contacto__ok" role="status" tabindex="-1" hidden data-ok>
+    <strong>¡Gracias! Recibimos tu mensaje.</strong>
+    Te respondemos al email que dejaste, en general en unos días.
+  </div>
+
+  <div class="form-contacto__campos" data-campos>
+    {sp && (
+      <div class="bjs-campo">
+        <label class="bjs-label" for={campo('empresa')}>Comercio o empresa</label>
+        <input class="bjs-input" id={campo('empresa')} name="empresa" type="text" autocomplete="organization" maxlength={LIMITES_CAMPOS.empresa} required aria-describedby={`${campo('empresa')}-error`} />
+        <span class="bjs-msj-error" id={`${campo('empresa')}-error`} hidden></span>
+      </div>
+    )}
+    <div class="bjs-campo">
+      <label class="bjs-label" for={campo('nombre')}>{sp ? 'Tu nombre' : 'Nombre'}</label>
+      <input class="bjs-input" id={campo('nombre')} name="nombre" type="text" autocomplete="name" maxlength={LIMITES_CAMPOS.nombre} required aria-describedby={`${campo('nombre')}-error`} />
+      <span class="bjs-msj-error" id={`${campo('nombre')}-error`} hidden></span>
+    </div>
+    <div class="bjs-campo">
+      <label class="bjs-label" for={campo('email')}>Email</label>
+      <input class="bjs-input" id={campo('email')} name="email" type="email" autocomplete="email" inputmode="email" maxlength={LIMITES_CAMPOS.email} required aria-describedby={`${campo('email')}-error`} />
+      <span class="bjs-msj-error" id={`${campo('email')}-error`} hidden></span>
+    </div>
+    <div class="bjs-campo">
+      <label class="bjs-label" for={campo('telefono')}>Teléfono (opcional)</label>
+      <input class="bjs-input" id={campo('telefono')} name="telefono" type="tel" autocomplete="tel" maxlength={LIMITES_CAMPOS.telefono} aria-describedby={`${campo('telefono')}-error`} />
+      <span class="bjs-msj-error" id={`${campo('telefono')}-error`} hidden></span>
+    </div>
+    <div class="bjs-campo">
+      <label class="bjs-label" for={campo('mensaje')}>{sp ? '¿Cómo te gustaría acompañar al club?' : 'Mensaje'}</label>
+      <textarea class="bjs-input form-contacto__mensaje" id={campo('mensaje')} name="mensaje" rows="5" maxlength={LIMITES_CAMPOS.mensaje} required aria-describedby={`${campo('mensaje')}-error`}></textarea>
+      <span class="bjs-msj-error" id={`${campo('mensaje')}-error`} hidden></span>
+    </div>
+
+    <!-- Campo trampa: invisible para personas y lectores de pantalla; los robots lo completan. -->
+    <div class="form-contacto__trampa" aria-hidden="true">
+      <label for={campo('sitio_web')}>No completar</label>
+      <input id={campo('sitio_web')} name="sitio_web" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    {siteKey && <div class="cf-turnstile" data-sitekey={siteKey} data-language="es" data-size="flexible"></div>}
+
+    <p class="bjs-ayuda">Usamos estos datos solo para responderte. No los guardamos en el sitio.</p>
+    <button type="submit" class="bjs-btn bjs-btn--primario form-contacto__enviar" data-enviar>{sp ? 'Enviar propuesta' : 'Enviar mensaje'}</button>
+  </div>
+</form>
+
+{siteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+
+<script>
+  import { normalizar, validarContacto, type ErroresContacto } from '../../lib/contacto';
+
+  document.querySelectorAll<HTMLFormElement>('[data-form-contacto]').forEach((form) => {
+    const id = form.dataset.id ?? '';
+    const boton = form.querySelector<HTMLButtonElement>('[data-enviar]')!;
+    const textoBoton = boton.textContent ?? 'Enviar';
+    const errorGeneral = form.querySelector<HTMLElement>('[data-error-general]')!;
+    const ok = form.querySelector<HTMLElement>('[data-ok]')!;
+    const campos = form.querySelector<HTMLElement>('[data-campos]')!;
+    const nombres = ['empresa', 'nombre', 'email', 'telefono', 'mensaje'] as const;
+
+    const mostrarErrores = (errores: ErroresContacto) => {
+      let primero: HTMLElement | null = null;
+      for (const n of nombres) {
+        const control = form.querySelector<HTMLElement>(`#${id}-${n}`);
+        const span = form.querySelector<HTMLElement>(`#${id}-${n}-error`);
+        if (!control || !span) continue;
+        const msj = errores[n];
+        span.textContent = msj ?? '';
+        span.hidden = !msj;
+        control.setAttribute('aria-invalid', msj ? 'true' : 'false');
+        if (msj && !primero) primero = control;
+      }
+      primero?.focus();
+    };
+
+    const setCargando = (cargando: boolean) => {
+      boton.disabled = cargando;
+      boton.setAttribute('aria-busy', String(cargando));
+      boton.innerHTML = cargando ? '<span class="bjs-spin" aria-hidden="true"></span>Enviando…' : textoBoton;
+    };
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      errorGeneral.hidden = true;
+      const entrada = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      const errores = validarContacto(normalizar(entrada));
+      mostrarErrores(errores);
+      if (Object.keys(errores).length) return;
+
+      setCargando(true);
+      try {
+        const r = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(entrada),
+        });
+        const datos = (await r.json().catch(() => ({}))) as { ok?: boolean; error?: string; errores?: ErroresContacto };
+        if (r.ok && datos.ok) {
+          campos.hidden = true;
+          ok.hidden = false;
+          ok.focus();
+          return;
+        }
+        if (datos.errores) mostrarErrores(datos.errores);
+        errorGeneral.innerHTML = '';
+        const fuerte = document.createElement('strong');
+        fuerte.textContent = datos.error ?? 'No pudimos enviar el mensaje. Probá de nuevo en unos minutos.';
+        errorGeneral.append(fuerte);
+        errorGeneral.hidden = false;
+        errorGeneral.focus();
+        (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
+      } catch {
+        errorGeneral.textContent = 'No hay conexión. Revisá tu internet y volvé a intentar.';
+        errorGeneral.hidden = false;
+        errorGeneral.focus();
+      } finally {
+        setCargando(false);
+      }
+    });
+  });
+</script>

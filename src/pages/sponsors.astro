@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import BannerSponsor from '../components/sponsors/BannerSponsor.astro';
+import FormContacto from '../components/contacto/FormContacto.astro';
+import EstadoVacio from '../components/EstadoVacio.astro';
+import { obtenerSponsors } from '../lib/cms';
+
+const sponsors = await obtenerSponsors();
+const nivel = (n: string) => sponsors.filter((s) => s.nivel === n);
+const principales = nivel('principal');
+const oficiales = nivel('oficial');
+const colaboradores = nivel('colaborador');
+---
+<Base titulo="Sponsors" descripcion="Comercios y empresas que acompañan al Club Atlético Boca Juniors de Serodino. Sumate como sponsor.">
+  <div class="contenedor">
+    <h1 class="pagina-titulo">Nos acompañan</h1>
+    <p class="pruebas-bajada">Gracias a los comercios y empresas que hacen posible el club.</p>
+
+    {sponsors.length === 0 ? (
+      <div class="seccion"><EstadoVacio titulo="Todavía no cargamos a nuestros sponsors.">¿Tu comercio quiere ser el primero? Escribinos abajo.</EstadoVacio></div>
+    ) : (
+      <>
+        {principales.length > 0 && (
+          <section class="seccion" aria-labelledby="t-principales">
+            <h2 class="seccion-titulo" id="t-principales">Sponsors principales</h2>
+            <ul class="sponsors sponsors--principales">{principales.map((s) => <li><BannerSponsor sponsor={s} principal /></li>)}</ul>
+          </section>
+        )}
+        {oficiales.length > 0 && (
+          <section class="seccion" aria-labelledby="t-oficiales">
+            <h2 class="seccion-titulo" id="t-oficiales">Sponsors oficiales</h2>
+            <ul class="sponsors">{oficiales.map((s) => <li><BannerSponsor sponsor={s} /></li>)}</ul>
+          </section>
+        )}
+        {colaboradores.length > 0 && (
+          <section class="seccion" aria-labelledby="t-colaboradores">
+            <h2 class="seccion-titulo" id="t-colaboradores">Colaboradores</h2>
+            <ul class="colaboradores">
+              {colaboradores.map((s) => (
+                <li>{s.url && /^https?:\/\//.test(s.url) ? <a href={s.url} rel="noopener sponsored">{s.nombre}</a> : s.nombre}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </>
+    )}
+
+    <section class="seccion sumate" id="sumate" aria-labelledby="t-sumate">
+      <h2 class="seccion-titulo" id="t-sumate">¿Tu empresa quiere ser sponsor?</h2>
+      <p style="max-width:60ch;margin:0 0 var(--space-6)">Tu marca en la camiseta, en la cancha o en este sitio, y el agradecimiento de todo el pueblo. Dejanos tus datos y te contamos las opciones.</p>
+      <FormContacto tipo="sponsor" id="sponsor" />
+    </section>
+  </div>
+</Base>

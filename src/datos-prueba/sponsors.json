@@ -1,0 +1,51 @@
+[
+ {
+  "_id": "s1",
+  "nombre": "[Sponsor principal 1]",
+  "nivel": "principal",
+  "url": "https://example.com",
+  "logo": null
+ },
+ {
+  "_id": "s2",
+  "nombre": "[Sponsor principal 2]",
+  "nivel": "principal",
+  "url": null,
+  "logo": null
+ },
+ {
+  "_id": "s3",
+  "nombre": "[Corralón]",
+  "nivel": "oficial",
+  "url": "https://example.com",
+  "logo": null
+ },
+ {
+  "_id": "s4",
+  "nombre": "[Panadería]",
+  "nivel": "oficial",
+  "url": null,
+  "logo": null
+ },
+ {
+  "_id": "s5",
+  "nombre": "[Ferretería]",
+  "nivel": "oficial",
+  "url": "https://example.com",
+  "logo": null
+ },
+ {
+  "_id": "s6",
+  "nombre": "[Almacén]",
+  "nivel": "colaborador",
+  "url": null,
+  "logo": null
+ },
+ {
+  "_id": "s7",
+  "nombre": "[Taller]",
+  "nivel": "colaborador",
+  "url": "https://example.com",
+  "logo": null
+ }
+]

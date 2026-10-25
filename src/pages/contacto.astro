@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import FormContacto from '../components/contacto/FormContacto.astro';
+import Mapa from '../components/contacto/Mapa.astro';
+import { obtenerConfiguracion } from '../lib/cms';
+import { enlaceWhatsApp } from '../lib/inscripcion';
+
+const config = await obtenerConfiguracion();
+const lat = config.latitud ?? -32.6045;
+const lon = config.longitud ?? -60.94404;
+const whatsapp = enlaceWhatsApp(config.whatsapp, '¡Hola! Les escribo desde el sitio del club.');
+const nombre = config.nombreClub || 'Club Atlético Boca Juniors de Serodino';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SportsClub',
+  name: nombre,
+  sport: 'Fútbol',
+  url: new URL('/', Astro.site).toString(),
+  ...(config.email ? { email: config.email } : {}),
+  address: { '@type': 'PostalAddress', streetAddress: config.direccion ?? undefined, addressLocality: 'Serodino', addressRegion: 'Santa Fe', addressCountry: 'AR' },
+  geo: { '@type': 'GeoCoordinates', latitude: lat, longitude: lon },
+  ...(config.instagram ? { sameAs: [config.instagram] } : {}),
+};
+---
+<Base titulo="Contacto" descripcion="Cómo llegar al Club Atlético Boca Juniors de Serodino, WhatsApp, email, Instagram, horarios de secretaría y formulario de contacto." jsonLd={jsonLd}>
+  <div class="contenedor">
+    <h1 class="pagina-titulo">Contacto</h1>
+
+    <div class="contacto">
+      <section aria-labelledby="t-datos">
+        <h2 class="seccion-titulo" id="t-datos">Dónde estamos</h2>
+        <dl class="contacto__datos">
+          {config.direccion && <><dt>Dirección</dt><dd>{config.direccion}</dd></>}
+          {whatsapp && <><dt>WhatsApp</dt><dd><a href={whatsapp} rel="noopener">Escribinos<span class="bjs-sr"> (abre WhatsApp)</span></a></dd></>}
+          {config.email && <><dt>Email</dt><dd><a href={`mailto:${config.email}`}>{config.email}</a></dd></>}
+          {config.instagram && <><dt>Instagram</dt><dd><a href={config.instagram} rel="noopener">@clubboca_serodino</a></dd></>}
+          {config.horariosSecretaria && <><dt>Secretaría</dt><dd style="white-space:pre-line">{config.horariosSecretaria}</dd></>}
+        </dl>
+        <div id="mapa" style="margin-top:var(--space-6)">
+          <Mapa latitud={lat} longitud={lon} lugar={config.direccion || 'Serodino, Santa Fe'} />
+        </div>
+      </section>
+
+      <section aria-labelledby="t-escribinos">
+        <h2 class="seccion-titulo" id="t-escribinos">Escribinos</h2>
+        <FormContacto tipo="contacto" id="contacto" />
+      </section>
+    </div>
+  </div>
+</Base>
