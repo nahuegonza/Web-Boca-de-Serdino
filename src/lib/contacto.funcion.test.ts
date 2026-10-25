@@ -17,7 +17,7 @@ const pedido = (cuerpo: unknown, headers: Record<string, string> = {}) =>
   });
 
 const fetchFalso = (turnstileOk = true, resendOk = true) =>
-  vi.fn(async (url: string | URL | Request) => {
+  vi.fn(async (url: string | URL | Request, _init?: RequestInit) => {
     const u = String(url);
     if (u.includes('turnstile')) return new Response(JSON.stringify({ success: turnstileOk }));
     if (u.includes('resend')) return new Response('{}', { status: resendOk ? 200 : 500 });
@@ -34,7 +34,7 @@ describe('función /api/contacto', () => {
     expect(r.status).toBe(200);
     expect(await r.json()).toEqual({ ok: true });
     const llamadaResend = f.mock.calls.find((c) => String(c[0]).includes('resend'));
-    expect(JSON.parse(String((llamadaResend?.[1] as RequestInit).body)).to).toEqual(['club@ejemplo.com']);
+    expect(JSON.parse(String(llamadaResend?.[1]?.body)).to).toEqual(['club@ejemplo.com']);
   });
 
   it('sin JavaScript: redirige a una página sin datos en la URL', async () => {
