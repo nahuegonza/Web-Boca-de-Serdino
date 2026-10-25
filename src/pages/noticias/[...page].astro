@@ -1,0 +1,29 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro';
+import Base from '../../layouts/Base.astro';
+import FiltroCategoriaNoticias from '../../components/noticias/FiltroCategoriaNoticias.astro';
+import ListadoNoticias from '../../components/noticias/ListadoNoticias.astro';
+import EmbedsInstagram from '../../components/noticias/EmbedsInstagram.astro';
+import { obtenerConfiguracion, obtenerNoticias, type NoticiaResumen } from '../../lib/cms';
+import { NOTICIAS_POR_PAGINA, ultimasNoticias } from '../../lib/noticias';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const noticias = ultimasNoticias(await obtenerNoticias(), Infinity);
+  return paginate(noticias, { pageSize: NOTICIAS_POR_PAGINA });
+}
+
+interface Props { page: Page<NoticiaResumen> }
+const { page } = Astro.props;
+const config = await obtenerConfiguracion();
+const titulo = page.currentPage > 1 ? `Noticias, página ${page.currentPage}` : 'Noticias';
+---
+<Base titulo={titulo} descripcion="Noticias y actualidad del Club Atlético Boca Juniors de Serodino: fútbol, inferiores, vida institucional y eventos.">
+  <div class="contenedor">
+    <h1 class="pagina-titulo">Noticias</h1>
+    <FiltroCategoriaNoticias />
+    <div class="seccion" style="margin-top:var(--space-6)">
+      <ListadoNoticias page={page} vacio="Todavía no hay noticias publicadas." instagram={config.instagram} />
+    </div>
+    {page.currentPage === 1 && <EmbedsInstagram urls={config.instagramDestacados} perfil={config.instagram} />}
+  </div>
+</Base>

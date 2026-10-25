@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+import Imagen from '../../components/Imagen.astro';
+import TextoRico from '../../components/TextoRico.astro';
+import Galeria from '../../components/Galeria.astro';
+import Compartir from '../../components/noticias/Compartir.astro';
+import CardNoticia from '../../components/noticias/CardNoticia.astro';
+import { obtenerNoticias, type Noticia } from '../../lib/cms';
+import { textoPlano, tituloCategoria, ultimasNoticias, CATEGORIAS_NOTICIA } from '../../lib/noticias';
+import { diaLargo, isoValido } from '../../lib/fechas';
+
+export async function getStaticPaths() {
+  const noticias = ultimasNoticias(await obtenerNoticias(), Infinity);
+  return noticias.filter((n) => n.slug).map((n) => ({ params: { slug: n.slug }, props: { noticia: n, todas: noticias } }));
+}
+
+interface Props { noticia: Noticia; todas: Noticia[] }
+const { noticia, todas } = Astro.props;
+const url = new URL(`/noticias/${noticia.slug}`, Astro.site).toString();
+const descripcion = noticia.resumen || textoPlano(noticia.cuerpo) || `Noticia de ${tituloCategoria(noticia.categoria)} de Boca de Serodino.`;
+const relacionadas = todas.filter((n) => n._id !== noticia._id && n.categoria === noticia.categoria).slice(0, 3);
+const slugCategoria = CATEGORIAS_NOTICIA.find((c) => c.valor === noticia.categoria)?.slug;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: noticia.titulo,
+  datePublished: isoValido(noticia.fecha),
+  mainEntityOfPage: url,
+  publisher: { '@type': 'SportsOrganization', name: 'Club Atlético Boca Juniors de Serodino' },
+};
+---
+<Base titulo={noticia.titulo} descripcion={descripcion} imagen={noticia.imagen} tipo="article" jsonLd={jsonLd}>
+  <article class="contenedor nota">
+    <header class="nota__cabecera">
+      <p class="nota__meta">
+        {slugCategoria ? <a href={`/noticias/categoria/${slugCategoria}`}>{tituloCategoria(noticia.categoria)}</a> : tituloCategoria(noticia.categoria)}
+        <time datetime={isoValido(noticia.fecha)}>{diaLargo(noticia.fecha)}</time>
+      </p>
+      <h1 class="nota__titulo">{noticia.titulo}</h1>
+      {noticia.resumen && <p class="nota__bajada">{noticia.resumen}</p>}
+    </header>
+
+    {noticia.imagen && (
+      <figure class="nota__foto">
+        <Imagen imagen={noticia.imagen} ancho={1200} alto={750} anchos={[360, 640, 960, 1200, 1600]} sizes="(min-width: 75rem) 1136px, 100vw" prioridad />
+      </figure>
+    )}
+
+    <div class="nota__cuerpo">
+      <TextoRico bloques={noticia.cuerpo} />
+    </div>
+
+    {noticia.galeria?.length ? (
+      <section class="seccion" aria-labelledby="t-galeria">
+        <h2 class="seccion-titulo" id="t-galeria">Fotos</h2>
+        <Galeria fotos={noticia.galeria} titulo={noticia.titulo} id="nota" />
+      </section>
+    ) : null}
+
+    <div class="seccion nota__compartir">
+      <Compartir url={url} titulo={noticia.titulo} />
+    </div>
+
+    {relacionadas.length > 0 && (
+      <section class="seccion" aria-labelledby="t-relacionadas">
+        <h2 class="seccion-titulo" id="t-relacionadas">Más de {tituloCategoria(noticia.categoria)}</h2>
+        <ul class="noticias-grilla">{relacionadas.map((n) => <li><CardNoticia noticia={n} /></li>)}</ul>
+      </section>
+    )}
+    <p class="seccion"><a class="bjs-link" href="/noticias">Ver todas las noticias</a></p>
+  </article>
+</Base>

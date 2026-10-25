@@ -1,0 +1,33 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro';
+import Base from '../../../../layouts/Base.astro';
+import FiltroCategoriaNoticias from '../../../../components/noticias/FiltroCategoriaNoticias.astro';
+import ListadoNoticias from '../../../../components/noticias/ListadoNoticias.astro';
+import { obtenerConfiguracion, obtenerNoticias, type NoticiaResumen } from '../../../../lib/cms';
+import { CATEGORIAS_NOTICIA, NOTICIAS_POR_PAGINA, ultimasNoticias } from '../../../../lib/noticias';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const noticias = ultimasNoticias(await obtenerNoticias(), Infinity);
+  // Se generan todas las categorías, aunque estén vacías, para que el filtro nunca lleve a un 404.
+  return CATEGORIAS_NOTICIA.flatMap((c) =>
+    paginate(
+      noticias.filter((n) => n.categoria === c.valor),
+      { params: { categoria: c.slug }, props: { titulo: c.titulo }, pageSize: NOTICIAS_POR_PAGINA },
+    ),
+  );
+}
+
+interface Props { page: Page<NoticiaResumen>; titulo: string }
+const { page, titulo } = Astro.props;
+const { categoria } = Astro.params;
+const config = await obtenerConfiguracion();
+---
+<Base titulo={`Noticias de ${titulo}${page.currentPage > 1 ? `, página ${page.currentPage}` : ''}`} descripcion={`Noticias de ${titulo.toLowerCase()} del Club Atlético Boca Juniors de Serodino.`}>
+  <div class="contenedor">
+    <h1 class="pagina-titulo">Noticias de {titulo}</h1>
+    <FiltroCategoriaNoticias actual={categoria} />
+    <div class="seccion" style="margin-top:var(--space-6)">
+      <ListadoNoticias page={page} vacio={`Todavía no hay noticias de ${titulo.toLowerCase()}.`} instagram={config.instagram} />
+    </div>
+  </div>
+</Base>

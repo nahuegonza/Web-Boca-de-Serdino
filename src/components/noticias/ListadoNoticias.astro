@@ -1,0 +1,25 @@
+---
+import type { Page } from 'astro';
+import type { NoticiaResumen } from '../../lib/cms';
+import CardNoticia from './CardNoticia.astro';
+import Paginacion from './Paginacion.astro';
+import EstadoVacio from '../EstadoVacio.astro';
+
+interface Props { page: Page<NoticiaResumen>; vacio: string; instagram?: string | null }
+const { page, vacio, instagram } = Astro.props;
+const [primera, ...resto] = page.data;
+const destacar = page.currentPage === 1 && !!primera;
+---
+{page.data.length ? (
+  <>
+    <ul class="noticias-grilla">
+      {destacar && <li class="noticias-grilla__destacada"><CardNoticia noticia={primera} nivel="h2" destacada prioridad /></li>}
+      {(destacar ? resto : page.data).map((n) => <li><CardNoticia noticia={n} nivel="h2" /></li>)}
+    </ul>
+    <Paginacion actual={page.currentPage} total={page.lastPage} anterior={page.url.prev} siguiente={page.url.next} />
+  </>
+) : (
+  <EstadoVacio titulo={vacio} accion={instagram ? { texto: 'Ver Instagram del club', href: instagram } : undefined}>
+    Mientras tanto, las novedades están en Instagram.
+  </EstadoVacio>
+)}
