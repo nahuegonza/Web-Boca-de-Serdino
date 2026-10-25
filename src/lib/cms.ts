@@ -74,6 +74,9 @@ export interface Categoria {
 }
 
 export interface Configuracion {
+  latitud?: number | null;
+  longitud?: number | null;
+  instagramDestacados?: string[] | null;
   nombreClub?: string | null;
   escudo?: ImagenCMS | null;
   whatsapp?: string | null;
@@ -113,33 +116,193 @@ const CONSULTA_FIXTURE = `
 }`;
 
 const CONSULTA_CONFIGURACION = `*[_type == "configuracion" && _id == "configuracion"][0] {
+  latitud, longitud, instagramDestacados,
   nombreClub, whatsapp, email, instagram, direccion, horariosSecretaria, descripcionSitio,
   "escudo": escudo${IMAGEN}, "imagenCompartir": imagenCompartir${IMAGEN}
 }`;
+
+/* ---------- Tipos de las demás secciones ---------- */
+
+/** Bloques de texto enriquecido (Portable Text) tal como los devuelve Sanity. */
+export type TextoRico = Array<Record<string, unknown>>;
+
+export type Posicion = 'arquero' | 'defensor' | 'mediocampista' | 'delantero';
+
+export interface Persona {
+  _id: string;
+  tipo: 'jugador' | 'tecnico';
+  nombre: string;
+  apellido?: string | null;
+  numero?: number | null;
+  posicion?: Posicion | null;
+  rol?: string | null;
+  autorizacionImagen?: boolean | null;
+  foto?: ImagenCMS | null;
+}
+
+export interface CategoriaPlantel {
+  _id: string;
+  nombre: string;
+  slug: string;
+  esMenores?: boolean | null;
+  personas: Persona[];
+}
+
+export type CategoriaNoticia = 'futbol' | 'inferiores' | 'institucional' | 'eventos';
+
+export interface NoticiaResumen {
+  _id: string;
+  titulo: string;
+  slug: string;
+  fecha: string;
+  categoria: CategoriaNoticia;
+  resumen?: string | null;
+  imagen?: ImagenCMS | null;
+}
+
+export interface Noticia extends NoticiaResumen {
+  cuerpo?: TextoRico | null;
+  galeria?: ImagenCMS[] | null;
+}
+
+export interface Hito {
+  _id: string;
+  anio: number;
+  titulo: string;
+  texto?: string | null;
+  foto?: ImagenCMS | null;
+}
+
+export interface FotoHistorica {
+  _id: string;
+  anio?: number | null;
+  epigrafe?: string | null;
+  imagen: ImagenCMS;
+}
+
+export interface MiembroComision {
+  _id: string;
+  cargo: string;
+  nombre: string;
+  foto?: ImagenCMS | null;
+}
+
+export interface ColorClub {
+  nombre: string;
+  hex: string;
+  significado?: string | null;
+}
+
+export interface Identidad {
+  anioFundacion?: number | null;
+  introduccion?: TextoRico | null;
+  escudo?: ImagenCMS | null;
+  significadoEscudo?: TextoRico | null;
+  colores?: ColorClub[] | null;
+  periodoComision?: string | null;
+}
+
+export interface Historia {
+  identidad: Identidad;
+  hitos: Hito[];
+  fotos: FotoHistorica[];
+  comision: MiembroComision[];
+}
+
+export type NivelSponsor = 'principal' | 'oficial' | 'colaborador';
+
+export interface Sponsor {
+  _id: string;
+  nombre: string;
+  nivel: NivelSponsor;
+  url?: string | null;
+  logo?: ImagenCMS | null;
+}
+
+export interface Convocatoria {
+  _id: string;
+  categoria: string;
+  anioDesde: number;
+  anioHasta: number;
+  genero?: 'mixto' | 'masculino' | 'femenino' | null;
+  dias?: string | null;
+  horario?: string | null;
+  lugar?: string | null;
+  queLlevar?: string[] | null;
+  cupoAgotado?: boolean | null;
+}
+
+export interface Inicio {
+  imagenHero?: ImagenCMS | null;
+  bajada?: string | null;
+}
+
+/* ---------- Consultas ---------- */
+
+const CONSULTA_PLANTEL = `
+*[_type == "categoria" && activa != false] | order(orden asc, nombre asc) {
+  _id, nombre, "slug": slug.current, esMenores,
+  "personas": *[_type == "persona" && activo != false && categoria._ref == ^._id] | order(tipo asc, orden asc, numero asc, apellido asc) {
+    _id, tipo, nombre, apellido, numero, posicion, rol, autorizacionImagen, "foto": foto${IMAGEN}
+  }
+}`;
+
+const NOTICIA_RESUMEN = `_id, titulo, "slug": slug.current, fecha, categoria, resumen, "imagen": imagenPrincipal${IMAGEN}`;
+
+const CONSULTA_NOTICIAS = `*[_type == "noticia" && defined(slug.current) && fecha <= now()] | order(fecha desc) {
+  ${NOTICIA_RESUMEN},
+  cuerpo[]{ ..., _type == "image" => { "url": asset->url, "ancho": asset->metadata.dimensions.width, "alto": asset->metadata.dimensions.height, alt, epigrafe } },
+  "galeria": galeria[]${IMAGEN}
+}`;
+
+const CONSULTA_HISTORIA = `{
+  "identidad": coalesce(*[_type == "identidad" && _id == "identidad"][0] {
+    anioFundacion, introduccion, significadoEscudo, colores[]{ nombre, hex, significado }, periodoComision,
+    "escudo": escudo${IMAGEN}
+  }, {}),
+  "hitos": *[_type == "hito"] | order(anio asc, _createdAt asc) { _id, anio, titulo, texto, "foto": foto${IMAGEN} },
+  "fotos": *[_type == "fotoHistorica" && defined(imagen.asset)] | order(anio asc, _createdAt asc) { _id, anio, epigrafe, "imagen": imagen${IMAGEN} },
+  "comision": *[_type == "miembroComision" && activo != false] | order(orden asc, _createdAt asc) { _id, cargo, nombre, "foto": foto${IMAGEN} }
+}`;
+
+const CONSULTA_SPONSORS = `*[_type == "sponsor" && activo != false] | order(orden asc, nombre asc) {
+  _id, nombre, nivel, url, "logo": logo${IMAGEN}
+}`;
+
+const CONSULTA_CONVOCATORIAS = `*[_type == "convocatoria" && activa == true] | order(anioDesde desc) {
+  _id, "categoria": coalesce(categoria->nombre, nombre), anioDesde, anioHasta, genero, dias, horario, lugar, queLlevar, cupoAgotado
+}`;
+
+const CONSULTA_INICIO = `*[_type == "inicio" && _id == "inicio"][0] { bajada, "imagenHero": imagenHero${IMAGEN} }`;
+
+/* ---------- Acceso ---------- */
 
 async function datosDePrueba<T>(archivo: string): Promise<T> {
   const mod = await import(`../datos-prueba/${archivo}.json`);
   return mod.default as T;
 }
 
-// Se memoriza para que todas las páginas del build compartan una sola consulta.
-let fixture: Promise<Categoria[]> | undefined;
-let configuracion: Promise<Configuracion> | undefined;
+// Cada consulta se memoriza: todas las páginas del build comparten un solo pedido al CMS.
+const cache = new Map<string, Promise<unknown>>();
 
-export function obtenerFixture(): Promise<Categoria[]> {
-  fixture ??= usarDatosDePrueba
-    ? datosDePrueba<Categoria[]>('fixture')
-    : cliente
-      ? cliente.fetch<Categoria[]>(CONSULTA_FIXTURE)
-      : Promise.resolve([]);
-  return fixture;
+function consultar<T>(clave: string, groq: string, vacio: T): Promise<T> {
+  if (!cache.has(clave)) {
+    const pedido = usarDatosDePrueba
+      ? datosDePrueba<T>(clave)
+      : cliente
+        ? cliente.fetch<T | null>(groq).then((r) => r ?? vacio)
+        : Promise.resolve(vacio);
+    cache.set(clave, pedido);
+  }
+  return cache.get(clave) as Promise<T>;
 }
 
-export function obtenerConfiguracion(): Promise<Configuracion> {
-  configuracion ??= usarDatosDePrueba
-    ? datosDePrueba<Configuracion>('configuracion')
-    : cliente
-      ? cliente.fetch<Configuracion | null>(CONSULTA_CONFIGURACION).then((c) => c ?? {})
-      : Promise.resolve({});
-  return configuracion;
-}
+export const obtenerFixture = () => consultar<Categoria[]>('fixture', CONSULTA_FIXTURE, []);
+export const obtenerConfiguracion = () => consultar<Configuracion>('configuracion', CONSULTA_CONFIGURACION, {});
+export const obtenerPlantel = () => consultar<CategoriaPlantel[]>('plantel', CONSULTA_PLANTEL, []);
+export const obtenerNoticias = () => consultar<Noticia[]>('noticias', CONSULTA_NOTICIAS, []);
+export const obtenerHistoria = () =>
+  consultar<Historia>('historia', CONSULTA_HISTORIA, { identidad: {}, hitos: [], fotos: [], comision: [] });
+export const obtenerSponsors = () => consultar<Sponsor[]>('sponsors', CONSULTA_SPONSORS, []);
+export const obtenerConvocatorias = () => consultar<Convocatoria[]>('convocatorias', CONSULTA_CONVOCATORIAS, []);
+export const obtenerInicio = () => consultar<Inicio>('inicio', CONSULTA_INICIO, {});

@@ -1,0 +1,51 @@
+---
+/**
+ * Imagen del CMS optimizada en el build: AVIF y WebP, varios anchos (srcset) y lazy loading.
+ * Sin imagen: un recuadro con el escudo del club, del mismo tamaño, para no mover el diseño.
+ */
+import { Picture } from 'astro:assets';
+import type { ImagenCMS } from '../lib/cms';
+import EscudoProvisorio from './EscudoProvisorio.astro';
+
+interface Props {
+  imagen?: ImagenCMS | null;
+  /** Ancho y alto de referencia para la proporción (ej.: 800 × 500 = 16:10). */
+  ancho: number;
+  alto: number;
+  /** Atributo sizes: cuánto ocupa la imagen en pantalla. */
+  sizes: string;
+  /** Anchos a generar. */
+  anchos?: number[];
+  alt?: string;
+  prioridad?: boolean;
+  class?: string;
+  /** "cover" recorta para llenar la proporción; "contain" la muestra entera (logos). */
+  ajuste?: 'cover' | 'contain';
+}
+
+const { imagen, ancho, alto, sizes, anchos = [360, 640, 960, 1280], alt, prioridad = false, class: clase, ajuste = 'cover' } = Astro.props;
+const textoAlt = alt ?? imagen?.alt ?? '';
+const anchosValidos = imagen ? anchos.filter((a) => a <= Math.max(imagen.ancho, anchos[0])) : anchos;
+---
+{imagen?.url ? (
+  <Picture
+    src={imagen.url}
+    width={ancho}
+    height={alto}
+    widths={anchosValidos}
+    sizes={sizes}
+    formats={['avif', 'webp']}
+    fallbackFormat="jpg"
+    fit={ajuste === 'cover' ? 'cover' : 'contain'}
+    alt={textoAlt}
+    loading={prioridad ? 'eager' : 'lazy'}
+    decoding={prioridad ? 'sync' : 'async'}
+    fetchpriority={prioridad ? 'high' : 'auto'}
+    class={clase}
+    style={`aspect-ratio:${ancho}/${alto};width:100%;height:auto;object-fit:${ajuste};display:block`}
+  />
+) : (
+  <div class:list={['imagen-vacia', clase]} style={`aspect-ratio:${ancho}/${alto}`} role={textoAlt ? 'img' : undefined} aria-label={textoAlt || undefined} aria-hidden={textoAlt ? undefined : 'true'}>
+    <EscudoProvisorio ancho={56} class="imagen-vacia__escudo" />
+  </div>
+)}

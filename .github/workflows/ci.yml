@@ -19,10 +19,8 @@ jobs:
       - run: npx astro check
       - name: Build sin CMS (verifica los estados vacíos)
         run: npm run build
-      - name: Build con datos de prueba
-        run: npm run build
-        env:
-          DATOS_DE_PRUEBA: '1'
+      - name: Build con datos de prueba (incluye optimización de imágenes)
+        run: npm run build:prueba
 
   panel:
     runs-on: ubuntu-latest
